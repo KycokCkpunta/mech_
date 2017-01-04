@@ -1,28 +1,26 @@
-[gd_scene load_steps=13 format=1]
+[gd_scene load_steps=14 format=1]
 
-[ext_resource path="res://art/mechs/base_mech1/mech_top.png" type="Texture" id=1]
-[ext_resource path="res://art/mechs/base_mech1/mech_handl.png" type="Texture" id=2]
-[ext_resource path="res://art/mechs/base_mech1/mech_handr.png" type="Texture" id=3]
-[ext_resource path="res://art/mechs/base_mech1/mech_base.png" type="Texture" id=4]
-[ext_resource path="res://art/mechs/base_mech1/mech_leg.png" type="Texture" id=5]
+[ext_resource path="res://scr/mech.gd" type="Script" id=1]
+[ext_resource path="res://art/mechs/base_mech1/mech_top.png" type="Texture" id=2]
+[ext_resource path="res://art/mechs/base_mech1/mech_handl.png" type="Texture" id=3]
+[ext_resource path="res://art/mechs/base_mech1/mech_handr.png" type="Texture" id=4]
+[ext_resource path="res://art/mechs/base_mech1/mech_base.png" type="Texture" id=5]
+[ext_resource path="res://art/mechs/base_mech1/mech_leg.png" type="Texture" id=6]
 
-[sub_resource type="GDScript" id=7]
+[sub_resource type="CircleShape2D" id=1]
 
-script/source = "extends KinematicBody2D\n\nonready var base = get_node(\"base\")\nonready var base_pos = get_node(\"base/base_pos\")\nonready var top = get_node(\"top\")\n\nvar base_new_pos = Vector2(0,0)\nvar mouse_pos = Vector2(0,0)\n\n\nfunc _ready():\n\tset_fixed_process(true)\n\nfunc _fixed_process(delta):\n\tmouse_pos=get_local_mouse_pos()\n\tbase_pos.set_pos(base_pos.get_pos().linear_interpolate(base_new_pos,delta*10))\n\t\n\t\n\ttop.look_at(mouse_pos)\n\tbase.set_rot(lerp(base.get_rot(),top.get_rot(),delta*5))\n\t\n\t\n\t#input\n\tif Input.is_action_pressed(\"walk_fw\"):\n\t\tbase_new_pos+=Vector2(0,-1)\n\tif Input.is_action_pressed(\"walk_bk\"):\n\t\tbase_new_pos+=Vector2(0,1)\n\tif Input.is_action_pressed(\"walk_l\"):\n\t\tbase_new_pos+=Vector2(-1,0)\n\tif Input.is_action_pressed(\"walk_r\"):\n\t\tbase_new_pos+=Vector2(1,0)\n\tbase_new_pos=base_new_pos.normalized()\n\t\n\tupdate()\nfunc _draw():\n\tdraw_line(get_pos(),get_pos()+base_new_pos.normalized()*10,Color(1,1,0),2)"
+custom_solver_bias = 0.0
+radius = 7.0
 
 [sub_resource type="SpriteFrames" id=2]
 
-animations = [ { "frames":[ ExtResource( 1 ) ], "loop":true, "name":"default", "speed":5.0 } ]
+animations = [ { "frames":[ ExtResource( 2 ) ], "loop":true, "name":"default", "speed":5.0 } ]
 
 [sub_resource type="SpriteFrames" id=3]
 
-animations = [ { "frames":[ ExtResource( 2 ) ], "loop":true, "name":"default", "speed":5.0 } ]
-
-[sub_resource type="SpriteFrames" id=4]
-
 animations = [ { "frames":[ ExtResource( 3 ) ], "loop":true, "name":"default", "speed":5.0 } ]
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="SpriteFrames" id=4]
 
 animations = [ { "frames":[ ExtResource( 4 ) ], "loop":true, "name":"default", "speed":5.0 } ]
 
@@ -32,15 +30,23 @@ animations = [ { "frames":[ ExtResource( 5 ) ], "loop":true, "name":"default", "
 
 [sub_resource type="SpriteFrames" id=6]
 
-animations = [ { "frames":[ ExtResource( 5 ) ], "loop":true, "name":"default", "speed":5.0 } ]
+animations = [ { "frames":[ ExtResource( 6 ) ], "loop":true, "name":"default", "speed":5.0 } ]
+
+[sub_resource type="SpriteFrames" id=7]
+
+animations = [ { "frames":[ ExtResource( 6 ) ], "loop":true, "name":"default", "speed":5.0 } ]
 
 [node name="mech" type="KinematicBody2D"]
 
+transform/pos = Vector2( 0, 1 )
 input/pickable = false
+shapes/0/shape = SubResource( 1 )
+shapes/0/transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+shapes/0/trigger = false
 collision/layers = 1
 collision/mask = 1
 collision/margin = 0.08
-script/script = SubResource( 7 )
+script/script = ExtResource( 1 )
 
 [node name="top" type="AnimatedSprite" parent="."]
 
@@ -76,21 +82,22 @@ transform/pos = Vector2( 7, 10 )
 
 [node name="base" type="AnimatedSprite" parent="."]
 
-frames = SubResource( 1 )
+editor/display_folded = true
+frames = SubResource( 5 )
 animation = "default"
 
 [node name="l_leg" type="AnimatedSprite" parent="base"]
 
 transform/pos = Vector2( -4, 0 )
 z/z = -1
-frames = SubResource( 5 )
+frames = SubResource( 6 )
 animation = "default"
 
 [node name="r_leg" type="AnimatedSprite" parent="base"]
 
 transform/pos = Vector2( 4, 0 )
 z/z = -1
-frames = SubResource( 6 )
+frames = SubResource( 7 )
 animation = "default"
 
 [node name="base_pos" type="Position2D" parent="base"]
@@ -107,24 +114,12 @@ playback/speed = 1.0
 blend_times = [  ]
 autoplay = ""
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="pos" type="Position2D" parent="."]
 
-anchor_mode = 1
-rotating = false
-current = true
-zoom = Vector2( 0.4, 0.4 )
-limit/left = -10000000
-limit/top = -10000000
-limit/right = 10000000
-limit/bottom = 10000000
-limit/smoothed = false
-drag_margin/h_enabled = true
-drag_margin/v_enabled = true
-smoothing/enable = false
-smoothing/speed = 5.0
-drag_margin/left = 0.2
-drag_margin/top = 0.2
-drag_margin/right = 0.2
-drag_margin/bottom = 0.2
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+shape = SubResource( 1 )
+trigger = false
+_update_shape_index = 0
 
 
