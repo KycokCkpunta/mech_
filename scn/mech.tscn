@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=1]
+[gd_scene load_steps=16 format=1]
 
 [ext_resource path="res://scr/mech.gd" type="Script" id=1]
 [ext_resource path="res://art/mechs/base_mech1/mech_top.png" type="Texture" id=2]
@@ -36,6 +36,50 @@ animations = [ { "frames":[ ExtResource( 6 ) ], "loop":true, "name":"default", "
 
 animations = [ { "frames":[ ExtResource( 6 ) ], "loop":true, "name":"default", "speed":5.0 } ]
 
+[sub_resource type="Animation" id=8]
+
+resource/name = "idle"
+length = 1.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("top:transform/pos")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = { "times":FloatArray( 0 ), "transitions":FloatArray( 1 ), "update":0, "values":[ Vector2( 0, 0 ) ] }
+tracks/1/type = "value"
+tracks/1/path = NodePath("base/l_leg:transform/pos")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = { "times":FloatArray( 0 ), "transitions":FloatArray( 1 ), "update":0, "values":[ Vector2( -4, 0 ) ] }
+tracks/2/type = "value"
+tracks/2/path = NodePath("base/r_leg:transform/pos")
+tracks/2/interp = 1
+tracks/2/imported = false
+tracks/2/keys = { "times":FloatArray( 0 ), "transitions":FloatArray( 1 ), "update":0, "values":[ Vector2( 4, 0 ) ] }
+
+[sub_resource type="Animation" id=9]
+
+resource/name = "walk"
+length = 2.0
+loop = true
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("top:transform/pos")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = { "times":FloatArray( 0, 0.5, 1, 1.5 ), "transitions":FloatArray( 1, 1, 1, 1 ), "update":0, "values":[ Vector2( -1, 1 ), Vector2( 0, 0 ), Vector2( 1, 1 ), Vector2( 0, 0 ) ] }
+tracks/1/type = "value"
+tracks/1/path = NodePath("base/l_leg:transform/pos")
+tracks/1/interp = 1
+tracks/1/imported = false
+tracks/1/keys = { "times":FloatArray( 0, 1 ), "transitions":FloatArray( 1, 1 ), "update":0, "values":[ Vector2( -4, 3 ), Vector2( -4, -3 ) ] }
+tracks/2/type = "value"
+tracks/2/path = NodePath("base/r_leg:transform/pos")
+tracks/2/interp = 1
+tracks/2/imported = false
+tracks/2/keys = { "times":FloatArray( 0, 1 ), "transitions":FloatArray( 1, 1 ), "update":0, "values":[ Vector2( 4, -3 ), Vector2( 4, 3 ) ] }
+
 [node name="mech" type="KinematicBody2D"]
 
 transform/pos = Vector2( 0, 1 )
@@ -50,7 +94,7 @@ script/script = ExtResource( 1 )
 
 [node name="top" type="AnimatedSprite" parent="."]
 
-editor/display_folded = true
+transform/pos = Vector2( -1, 1 )
 z/z = 1
 frames = SubResource( 2 )
 animation = "default"
@@ -72,13 +116,13 @@ frames = SubResource( 4 )
 animation = "default"
 offset = Vector2( 2, 6 )
 
-[node name="l_arm_pos" type="Position2D" parent="top"]
+[node name="l_arm_rot" type="Position2D" parent="top"]
 
-transform/pos = Vector2( -8, 10 )
+transform/pos = Vector2( -7, -1 )
 
-[node name="r_arm_pos" type="Position2D" parent="top"]
+[node name="r_arm_rot" type="Position2D" parent="top"]
 
-transform/pos = Vector2( 7, 10 )
+transform/pos = Vector2( 7, -1 )
 
 [node name="base" type="AnimatedSprite" parent="."]
 
@@ -88,17 +132,19 @@ animation = "default"
 
 [node name="l_leg" type="AnimatedSprite" parent="base"]
 
-transform/pos = Vector2( -4, 0 )
+transform/pos = Vector2( -4, 3 )
 z/z = -1
 frames = SubResource( 6 )
 animation = "default"
+offset = Vector2( 0, -1 )
 
 [node name="r_leg" type="AnimatedSprite" parent="base"]
 
-transform/pos = Vector2( 4, 0 )
+transform/pos = Vector2( 4, -3 )
 z/z = -1
 frames = SubResource( 7 )
 animation = "default"
+offset = Vector2( 0, -1 )
 
 [node name="base_pos" type="Position2D" parent="base"]
 
@@ -107,19 +153,24 @@ transform/pos = Vector2( 0, -1 )
 [node name="anim" type="AnimationPlayer" parent="."]
 
 playback/process_mode = 1
-playback/default_blend_time = 0.0
+playback/default_blend_time = 0.1
 root/root = NodePath("..")
+anims/idle = SubResource( 8 )
+anims/walk = SubResource( 9 )
 playback/active = true
-playback/speed = 1.0
+playback/speed = 1.5
 blend_times = [  ]
-autoplay = ""
+autoplay = "idle"
 
 [node name="pos" type="Position2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
+visibility/visible = false
 shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
+
+[node name="rot" type="Position2D" parent="."]
 
 

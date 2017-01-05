@@ -108,6 +108,16 @@ environment = SubResource( 1 )
 
 [node name="mech" parent="." instance=ExtResource( 6 )]
 
+z/z = 1
+
+[node name="top" parent="mech"]
+
+visibility/visible = true
+
+[node name="anim" parent="mech"]
+
+playback/speed = 2.0
+
 [node name="Camera2D" type="Camera2D" parent="mech"]
 
 transform/pos = Vector2( 0, -1 )
@@ -138,7 +148,7 @@ texture = ExtResource( 7 )
 offset = Vector2( 0, 0 )
 scale = 2.0
 color = Color( 1, 0.710938, 0.710938, 1 )
-energy = 0.1
+energy = 0.5
 mode = 0
 range/height = 0.0
 range/z_min = -1024

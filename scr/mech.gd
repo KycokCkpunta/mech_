@@ -4,19 +4,28 @@ onready var base = get_node("base")
 onready var base_pos = get_node("base/base_pos")
 onready var top = get_node("top")
 onready var _pos = get_node("pos")
+onready var _rot = get_node("rot")
+onready var anim = get_node("anim")
+onready var l_arm = get_node("top/l_arm")
+onready var r_arm = get_node("top/r_arm")
+onready var l_arm_rot = get_node("top/l_arm_rot")
+onready var r_arm_rot = get_node("top/r_arm_rot")
 
 var move_vector = Vector2(0,0)
 var base_move_vector = Vector2(0,0)
 var base_new_pos = Vector2(0,1)
 var mouse_pos = Vector2(0,0)
 
+var new_anim = "idle"
 
 func _ready():
 	set_fixed_process(true)
 
 func _fixed_process(delta):
+	#base-top
 	mouse_pos=get_parent().mouse_pos
-	top.look_at(mouse_pos)
+	_rot.look_at(mouse_pos)
+	top.set_rot(lerp(top.get_rot(),_rot.get_rot(),delta*10))
 	base.set_rot(lerp(base.get_rot(),top.get_rot()+_pos.get_angle_to(base_pos.get_pos()+get_pos()),delta*5))
 	base_pos.set_pos(base_pos.get_pos().linear_interpolate(base_new_pos,delta*10))
 #	#input
@@ -53,16 +62,22 @@ func _fixed_process(delta):
 			move_vector=Vector2(0,1).rotated(base.get_rot())
 		else:
 			move_vector=Vector2(0,-1).rotated(base.get_rot())
+		new_anim = "walk"
 	else:
 		move_vector=Vector2(0,0)
+		new_anim = "idle"
 	move(move_vector*delta*32)
-	
 	var slide_attempts = 4
 	while(is_colliding() and slide_attempts > 0):
 		move_vector = get_collision_normal().slide(move_vector)
 		move_vector = move(move_vector*delta*16)
 		slide_attempts -= 1
-	update()
-
-func _draw():
-	draw_line(base.get_pos(),base.get_pos()+move_vector*25,Color(1,1,0),3,true)
+	#processing_arms
+	l_arm_rot.look_at(mouse_pos)
+	r_arm_rot.look_at(mouse_pos)
+	l_arm.set_rot(lerp(l_arm.get_rot(),l_arm_rot.get_rot(),delta*15))
+	r_arm.set_rot(lerp(r_arm.get_rot(),r_arm_rot.get_rot(),delta*15))
+	#animating
+	if anim.get_current_animation() != new_anim:
+		anim.play(new_anim)
+	
