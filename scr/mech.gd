@@ -36,13 +36,13 @@ func _fixed_process(delta):
 		base_new_pos+=Vector2(0,1)
 		base_move_vector+=Vector2(0,1)
 	if Input.is_action_pressed("walk_l"):
-		if base_move_vector.y < 0:
+		if base_move_vector.y <= 0:
 			base_new_pos+=Vector2(1,0)
 		else:
 			base_new_pos+=Vector2(-1,0)
 		base_move_vector+=Vector2(-1,0)
 	if Input.is_action_pressed("walk_r"):
-		if base_move_vector.y < 0:
+		if base_move_vector.y <= 0:
 			base_new_pos+=Vector2(-1,0)
 		else:
 			base_new_pos+=Vector2(1,0)
@@ -50,7 +50,7 @@ func _fixed_process(delta):
 	base_new_pos=base_new_pos.normalized()
 	base_move_vector=base_move_vector.normalized()
 	#global_move_vector
-	if base_move_vector.y < 0:
+	if base_move_vector.y <= 0:
 		move_vector=Vector2(0,1).rotated(base.get_rot())
 	else:
 		move_vector=Vector2(0,-1).rotated(base.get_rot())
@@ -58,7 +58,7 @@ func _fixed_process(delta):
 	Input.is_action_pressed("walk_bk") or
 	Input.is_action_pressed("walk_l") or
 	Input.is_action_pressed("walk_r")):
-		if base_move_vector.y < 0:
+		if base_move_vector.y <= 0:
 			move_vector=Vector2(0,1).rotated(base.get_rot())
 		else:
 			move_vector=Vector2(0,-1).rotated(base.get_rot())
