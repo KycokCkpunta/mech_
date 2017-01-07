@@ -66,7 +66,7 @@ func _fixed_process(delta):
 	else:
 		move_vector=Vector2(0,0)
 		new_anim = "idle"
-	move(move_vector*delta*32)
+	move(move_vector*delta*36)
 	var slide_attempts = 4
 	while(is_colliding() and slide_attempts > 0):
 		move_vector = get_collision_normal().slide(move_vector)

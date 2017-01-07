@@ -10,11 +10,11 @@
 [ext_resource path="res://art/cursor.png" type="Texture" id=8]
 [ext_resource path="res://art/bb.png" type="Texture" id=9]
 
-[sub_resource type="CanvasItemMaterial" id=2]
+[sub_resource type="CanvasItemMaterial" id=1]
 
 shader/shading_mode = 1
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="SpriteFrames" id=2]
 
 animations = [ { "frames":[ ExtResource( 8 ) ], "loop":true, "name":"default", "speed":5.0 } ]
 
@@ -110,12 +110,7 @@ drag_margin/bottom = 0.2
 
 [node name="mech" parent="." instance=ExtResource( 6 )]
 
-editor/display_folded = true
 z/z = 1
-
-[node name="top" parent="mech"]
-
-editor/display_folded = true
 
 [node name="anim" parent="mech"]
 
@@ -147,9 +142,9 @@ shadow/item_mask = 1
 [node name="cur" type="AnimatedSprite" parent="."]
 
 visibility/self_opacity = 0.5
-material/material = SubResource( 2 )
+material/material = SubResource( 1 )
 z/z = 25
-frames = SubResource( 1 )
+frames = SubResource( 2 )
 animation = "default"
 
 [node name="bb" type="Sprite" parent="cur"]
