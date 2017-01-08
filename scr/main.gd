@@ -25,7 +25,7 @@ func _process(delta):
 	if gg.isActive == true:
 		pl_pos = gg.get_pos()
 	#camera
-	camera.set_pos(Vector2(lerp(pl_pos.x,(mouse_pos.x+pl_pos.x)/2,0.5),lerp(pl_pos.x,(mouse_pos.y+pl_pos.y)/2,0.5)))
+	camera.set_pos(pl_pos.linear_interpolate((mouse_pos+pl_pos)/2,0.75))
 	cam_zoom = clamp(0.5+pl_pos.distance_to(mouse_pos)/5000,0.5,2)
 	camera.set_zoom(Vector2(cam_zoom,cam_zoom))
 	
