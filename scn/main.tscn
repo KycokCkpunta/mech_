@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=1]
+[gd_scene load_steps=13 format=1]
 
 [ext_resource path="res://scr/main.gd" type="Script" id=1]
 [ext_resource path="res://scn/floor.tres" type="TileSet" id=2]
@@ -9,6 +9,7 @@
 [ext_resource path="res://art/light.png" type="Texture" id=7]
 [ext_resource path="res://art/cursor.png" type="Texture" id=8]
 [ext_resource path="res://art/bb.png" type="Texture" id=9]
+[ext_resource path="res://scn/gg.tscn" type="PackedScene" id=10]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -110,11 +111,8 @@ drag_margin/bottom = 0.2
 
 [node name="mech" parent="." instance=ExtResource( 6 )]
 
+editor/display_folded = true
 z/z = 1
-
-[node name="anim" parent="mech"]
-
-playback/speed = 2.0
 
 [node name="Light2D" type="Light2D" parent="mech"]
 
@@ -141,6 +139,7 @@ shadow/item_mask = 1
 
 [node name="cur" type="AnimatedSprite" parent="."]
 
+editor/display_folded = true
 visibility/self_opacity = 0.5
 material/material = SubResource( 1 )
 z/z = 25
@@ -153,5 +152,6 @@ transform/scale = Vector2( 100, 100 )
 z/z = -100
 texture = ExtResource( 9 )
 
+[node name="gg" parent="." instance=ExtResource( 10 )]
 
-[editable path="mech"]
+

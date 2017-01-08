@@ -18,16 +18,23 @@ var mouse_pos = Vector2(0,0)
 
 var new_anim = "idle"
 
+var isActive = true
+
 func _ready():
 	set_fixed_process(true)
 
 func _fixed_process(delta):
 	#base-top
 	mouse_pos=get_parent().mouse_pos
-	_rot.look_at(mouse_pos)
-	top.set_rot(lerp(top.get_rot(),_rot.get_rot(),delta*10))
-	base.set_rot(lerp(base.get_rot(),top.get_rot()+_pos.get_angle_to(base_pos.get_pos()+get_pos()),delta*5))
-	base_pos.set_pos(base_pos.get_pos().linear_interpolate(base_new_pos,delta*10))
+	l_arm.set_rot(lerp(l_arm.get_rot(),l_arm_rot.get_rot(),delta*15))
+	r_arm.set_rot(lerp(r_arm.get_rot(),r_arm_rot.get_rot(),delta*15))
+	if isActive:
+		_rot.look_at(mouse_pos)
+		l_arm_rot.look_at(mouse_pos)
+		r_arm_rot.look_at(mouse_pos)
+		top.set_rot(lerp(top.get_rot(),_rot.get_rot(),delta*10))
+		base.set_rot(lerp(base.get_rot(),top.get_rot()+_pos.get_angle_to(base_pos.get_pos()+get_pos()),delta*5))
+		base_pos.set_pos(base_pos.get_pos().linear_interpolate(base_new_pos,delta*10))
 #	#input
 	if Input.is_action_pressed("walk_fw"):
 		base_new_pos+=Vector2(0,1)
@@ -57,7 +64,7 @@ func _fixed_process(delta):
 	if (Input.is_action_pressed("walk_fw") or
 	Input.is_action_pressed("walk_bk") or
 	Input.is_action_pressed("walk_l") or
-	Input.is_action_pressed("walk_r")):
+	Input.is_action_pressed("walk_r")) and isActive:
 		if base_move_vector.y <= 0:
 			move_vector=Vector2(0,1).rotated(base.get_rot())
 		else:
@@ -72,11 +79,6 @@ func _fixed_process(delta):
 		move_vector = get_collision_normal().slide(move_vector)
 		move_vector = move(move_vector*delta*16)
 		slide_attempts -= 1
-	#processing_arms
-	l_arm_rot.look_at(mouse_pos)
-	r_arm_rot.look_at(mouse_pos)
-	l_arm.set_rot(lerp(l_arm.get_rot(),l_arm_rot.get_rot(),delta*15))
-	r_arm.set_rot(lerp(r_arm.get_rot(),r_arm_rot.get_rot(),delta*15))
 	#animating
 	if anim.get_current_animation() != new_anim:
 		anim.play(new_anim)

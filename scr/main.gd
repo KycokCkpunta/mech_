@@ -1,11 +1,13 @@
 extends Node2D
 
 var mouse_pos = Vector2(0,0)
+var pl_pos = Vector2(0,0)
 
 onready var cur = get_node("cur")
 onready var camera = get_node("Camera2D")
 onready var map_camera = get_node("Camera2D/map_cam")
 onready var mech = get_node("mech")
+onready var gg = get_node("gg")
 var cur_scale = 2
 var old_pos = Vector2()
 var cam_zoom = 0
@@ -18,9 +20,13 @@ func _ready():
 func _process(delta):
 	mouse_pos = get_local_mouse_pos()
 	
+	if mech.isActive == true:
+		pl_pos = mech.get_pos()
+	if gg.isActive == true:
+		pl_pos = gg.get_pos()
 	#camera
-	camera.set_pos(Vector2(lerp(mech.get_pos().x,(mouse_pos.x+mech.get_pos().x)/2,0.5),lerp(mech.get_pos().y,(mouse_pos.y+mech.get_pos().y)/2,0.5)))
-	cam_zoom = clamp(0.5+mech.get_pos().distance_to(mouse_pos)/5000,0.5,2)
+	camera.set_pos(Vector2(lerp(pl_pos.x,(mouse_pos.x+pl_pos.x)/2,0.5),lerp(pl_pos.x,(mouse_pos.y+pl_pos.y)/2,0.5)))
+	cam_zoom = clamp(0.5+pl_pos.distance_to(mouse_pos)/5000,0.5,2)
 	camera.set_zoom(Vector2(cam_zoom,cam_zoom))
 	
 	#cursor
