@@ -111,7 +111,6 @@ drag_margin/bottom = 0.2
 
 [node name="mech" parent="." instance=ExtResource( 6 )]
 
-editor/display_folded = true
 z/z = 1
 
 [node name="Light2D" type="Light2D" parent="mech"]
@@ -153,5 +152,28 @@ z/z = -100
 texture = ExtResource( 9 )
 
 [node name="gg" parent="." instance=ExtResource( 10 )]
+
+[node name="Light2D" type="Light2D" parent="gg"]
+
+transform/pos = Vector2( -0.193733, 1.50204e-05 )
+enabled = true
+editor_only = false
+texture = ExtResource( 7 )
+offset = Vector2( 0, 0 )
+scale = 2.0
+color = Color( 1, 0.710938, 0.710938, 1 )
+energy = 0.5
+mode = 0
+range/height = 0.0
+range/z_min = -1024
+range/z_max = 1024
+range/layer_min = 0
+range/layer_max = 0
+range/item_mask = 1
+shadow/enabled = true
+shadow/color = Color( 0, 0, 0, 0 )
+shadow/buffer_size = 512
+shadow/esm_multiplier = 0.0
+shadow/item_mask = 1
 
 

@@ -17,6 +17,9 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	set_process(true)
 
+func mech_mount():
+	get_node("gg").isActive = true
+
 func _process(delta):
 	mouse_pos = get_local_mouse_pos()
 	
