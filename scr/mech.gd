@@ -22,6 +22,7 @@ var new_anim = "idle"
 
 var isActive = false
 var canEnter = false
+var alive = false
 
 func _ready():
 	set_fixed_process(true)
@@ -32,20 +33,28 @@ func _fixed_process(delta):
 	l_arm.set_rot(lerp(l_arm.get_rot(),l_arm_rot.get_rot(),delta*15))
 	r_arm.set_rot(lerp(r_arm.get_rot(),r_arm_rot.get_rot(),delta*15))
 	if isActive:
+		get_node("3d_view").show()
 		_rot.look_at(mouse_pos)
 		l_arm_rot.look_at(mouse_pos)
 		r_arm_rot.look_at(mouse_pos)
 		top.set_rot(lerp(top.get_rot(),_rot.get_rot(),delta*10))
 		base.set_rot(lerp(base.get_rot(),top.get_rot()+_pos.get_angle_to(base_pos.get_pos()+get_pos()),delta*5))
 		base_pos.set_pos(base_pos.get_pos().linear_interpolate(base_new_pos,delta*10))
-		get_node("Light2D").set_enabled(true)
+		
+		if get_node("Light2D").get_energy() < 0.5:
+			get_node("Light2D").set_energy(get_node("Light2D").get_energy()+delta)
 		
 		if Input.is_action_just_pressed("mount"):
-			isActive = false
-			get_parent().mech_mount()
+			if alive:
+				isActive = false
+				get_node("../gg").set_pos(get_pos()+Vector2(0,10).rotated(top.get_rot()))
+				get_node("../gg").isActive = true
+			alive = true
+			
 	else:
-		get_node("Light2D").set_enabled(false)
-		
+		alive = false
+		get_node("Light2D").set_energy(0)
+		get_node("3d_view").hide()
 #	#input
 	if Input.is_action_pressed("walk_fw"):
 		base_new_pos+=Vector2(0,1)

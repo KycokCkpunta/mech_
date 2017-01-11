@@ -17,11 +17,8 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	set_process(true)
 
-func mech_mount():
-	get_node("gg").isActive = true
-
 func _process(delta):
-	mouse_pos = get_local_mouse_pos()
+	mouse_pos = get_global_mouse_pos()
 	
 	if mech.isActive == true:
 		pl_pos = mech.get_pos()
@@ -45,5 +42,20 @@ func _process(delta):
 	cur.get_node("bb").set_opacity(2-map_zoom)
 	if Input.is_action_pressed("map"):
 		map_zoom=lerp(map_zoom,8,delta*5)
+		get_node("floor").optimize()
+		if mech.isActive == true:
+			mech.get_node("3d_view").hide()
+			mech.get_node("Light2D").hide()
+		if gg.isActive == true:
+			gg.get_node("3d_view").hide()
+			gg.get_node("Light2D").hide()
 	else:
 		map_zoom=lerp(map_zoom,camera.get_zoom().x,delta*5)
+		if map_zoom < 0.7:
+			get_node("floor").deoptimize()
+			if mech.isActive == true:
+				mech.get_node("3d_view").show()
+				mech.get_node("Light2D").show()
+			if gg.isActive == true:
+				gg.get_node("3d_view").show()
+				gg.get_node("Light2D").show()

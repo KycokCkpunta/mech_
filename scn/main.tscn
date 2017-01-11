@@ -1,23 +1,24 @@
-[gd_scene load_steps=13 format=1]
+[gd_scene load_steps=14 format=1]
 
 [ext_resource path="res://scr/main.gd" type="Script" id=1]
 [ext_resource path="res://scn/floor.tres" type="TileSet" id=2]
 [ext_resource path="res://scr/floor.gd" type="Script" id=3]
 [ext_resource path="res://scn/walls.tres" type="TileSet" id=4]
 [ext_resource path="res://scr/gen.gd" type="Script" id=5]
-[ext_resource path="res://scn/mech.tscn" type="PackedScene" id=6]
-[ext_resource path="res://art/light.png" type="Texture" id=7]
-[ext_resource path="res://art/cursor.png" type="Texture" id=8]
-[ext_resource path="res://art/bb.png" type="Texture" id=9]
-[ext_resource path="res://scn/gg.tscn" type="PackedScene" id=10]
+[ext_resource path="res://art/cursor.png" type="Texture" id=6]
+[ext_resource path="res://art/bb.png" type="Texture" id=7]
+[ext_resource path="res://scn/gg.tscn" type="PackedScene" id=8]
+[ext_resource path="res://art/light.png" type="Texture" id=9]
+[ext_resource path="res://scn/mech.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scr/3d.gd" type="Script" id=11]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
-shader/shading_mode = 1
+shader/shading_mode = 0
 
 [sub_resource type="SpriteFrames" id=2]
 
-animations = [ { "frames":[ ExtResource( 8 ) ], "loop":true, "name":"default", "speed":5.0 } ]
+animations = [ { "frames":[ ExtResource( 6 ) ], "loop":true, "name":"default", "speed":5.0 } ]
 
 [node name="main" type="Node2D"]
 
@@ -64,13 +65,8 @@ tile_data = IntArray(  )
 
 script/script = ExtResource( 5 )
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-
-color = Color( 0, 0, 0, 1 )
-
 [node name="Camera2D" type="Camera2D" parent="."]
 
-editor/display_folded = true
 anchor_mode = 1
 rotating = false
 current = false
@@ -109,37 +105,8 @@ drag_margin/top = 0.2
 drag_margin/right = 0.2
 drag_margin/bottom = 0.2
 
-[node name="mech" parent="." instance=ExtResource( 6 )]
-
-z/z = 1
-
-[node name="Light2D" type="Light2D" parent="mech"]
-
-transform/pos = Vector2( -0.193733, -0.999985 )
-enabled = true
-editor_only = false
-texture = ExtResource( 7 )
-offset = Vector2( 0, 0 )
-scale = 2.0
-color = Color( 1, 0.710938, 0.710938, 1 )
-energy = 0.5
-mode = 0
-range/height = 0.0
-range/z_min = -1024
-range/z_max = 1024
-range/layer_min = 0
-range/layer_max = 0
-range/item_mask = 1
-shadow/enabled = true
-shadow/color = Color( 0, 0, 0, 0 )
-shadow/buffer_size = 512
-shadow/esm_multiplier = 0.0
-shadow/item_mask = 1
-
 [node name="cur" type="AnimatedSprite" parent="."]
 
-editor/display_folded = true
-visibility/self_opacity = 0.5
 material/material = SubResource( 1 )
 z/z = 25
 frames = SubResource( 2 )
@@ -149,19 +116,26 @@ animation = "default"
 
 transform/scale = Vector2( 100, 100 )
 z/z = -100
-texture = ExtResource( 9 )
+texture = ExtResource( 7 )
 
-[node name="gg" parent="." instance=ExtResource( 10 )]
+[node name="gg" parent="." instance=ExtResource( 8 )]
+
+editor/display_folded = true
+
+[node name="3d_view" type="ViewportSprite" parent="gg"]
+
+z/z = 10
+viewport = NodePath("../../3d")
+modulate = Color( 0, 0, 0, 1 )
 
 [node name="Light2D" type="Light2D" parent="gg"]
 
-transform/pos = Vector2( -0.193733, 1.50204e-05 )
 enabled = true
 editor_only = false
-texture = ExtResource( 7 )
+texture = ExtResource( 9 )
 offset = Vector2( 0, 0 )
 scale = 2.0
-color = Color( 1, 0.710938, 0.710938, 1 )
+color = Color( 1, 1, 1, 1 )
 energy = 0.5
 mode = 0
 range/height = 0.0
@@ -170,10 +144,83 @@ range/z_max = 1024
 range/layer_min = 0
 range/layer_max = 0
 range/item_mask = 1
-shadow/enabled = true
+shadow/enabled = false
 shadow/color = Color( 0, 0, 0, 0 )
 shadow/buffer_size = 512
-shadow/esm_multiplier = 0.0
+shadow/esm_multiplier = 80.0
 shadow/item_mask = 1
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+
+color = Color( 0, 0, 0, 1 )
+
+[node name="mech" parent="." instance=ExtResource( 10 )]
+
+editor/display_folded = true
+z/z = 1
+
+[node name="3d_view" type="ViewportSprite" parent="mech"]
+
+visibility/visible = false
+transform/pos = Vector2( 0, -1 )
+z/z = 10
+viewport = NodePath("../../3d")
+modulate = Color( 0, 0, 0, 1 )
+
+[node name="Light2D" type="Light2D" parent="mech"]
+
+transform/pos = Vector2( 0, -1 )
+enabled = true
+editor_only = false
+texture = ExtResource( 9 )
+offset = Vector2( 0, 0 )
+scale = 2.0
+color = Color( 1, 1, 1, 1 )
+energy = 0.5
+mode = 0
+range/height = 0.0
+range/z_min = -1024
+range/z_max = 1024
+range/layer_min = 0
+range/layer_max = 0
+range/item_mask = 1
+shadow/enabled = false
+shadow/color = Color( 0, 0, 0, 0 )
+shadow/buffer_size = 512
+shadow/esm_multiplier = 80.0
+shadow/item_mask = 1
+
+[node name="3d" type="Viewport" parent="."]
+
+rect = Rect2( 0, 0, 640, 360 )
+own_world = false
+world = null
+transparent_bg = false
+render_target/enabled = true
+render_target/v_flip = false
+render_target/clear_on_new_frame = true
+render_target/filter = false
+render_target/gen_mipmaps = false
+render_target/update_mode = 2
+audio_listener/enable_2d = false
+audio_listener/enable_3d = false
+physics/object_picking = false
+gui/disable_input = false
+script/script = ExtResource( 11 )
+
+[node name="Camera" type="Camera" parent="3d"]
+
+_import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+transform/local = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 10, 0.5 )
+projection = 0
+fov = 85.0
+near = 0.1
+far = 100.0
+keep_aspect = 1
+current = true
+visible_layers = 1048575
+environment = null
+h_offset = 0.0
+v_offset = 0.0
 
 

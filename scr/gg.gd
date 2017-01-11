@@ -9,7 +9,7 @@ var base_move_vector = Vector2(0,1)
 var base_new_pos = Vector2(0,0)
 
 var isActive = true
-var alive = false
+var alive = true
 
 func _ready():
 	set_fixed_process(true)
@@ -19,21 +19,23 @@ func _fixed_process(delta):
 	if isActive:
 		show()
 		get_node("CollisionShape2D").set_trigger(false)
-		get_node("Light2D").set_enabled(true)
 		head.look_at(mouse_pos)
+		if get_node("Light2D").get_energy() < 0.5:
+			get_node("Light2D").set_energy(get_node("Light2D").get_energy()+delta)
 		
 		if Input.is_action_just_pressed("mount") and get_parent().get_node("mech").canEnter:
+			print(alive)
 			if alive:
 				get_parent().get_node("mech").isActive = true
 				isActive = false
+				alive = false
 			alive = true
 		
 	else:
+		get_node("Light2D").set_energy(0)
 		set_pos(get_parent().get_node("mech").get_pos())
 		get_node("CollisionShape2D").set_trigger(true)
-		get_node("Light2D").set_enabled(false)
 		hide()
-		alive = false
 		
 	base.set_rot(lerp(base.get_rot(),head.get_rot(),delta*10))
 	
