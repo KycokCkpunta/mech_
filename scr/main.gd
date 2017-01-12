@@ -39,7 +39,6 @@ func _process(delta):
 	
 	#map
 	map_camera.set_zoom(Vector2(map_zoom,map_zoom))
-	cur.get_node("bb").set_opacity(2-map_zoom)
 	if Input.is_action_pressed("map"):
 		map_zoom=lerp(map_zoom,8,delta*5)
 		get_node("floor").optimize()

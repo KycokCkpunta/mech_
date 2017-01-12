@@ -24,7 +24,6 @@ func _fixed_process(delta):
 			get_node("Light2D").set_energy(get_node("Light2D").get_energy()+delta)
 		
 		if Input.is_action_just_pressed("mount") and get_parent().get_node("mech").canEnter:
-			print(alive)
 			if alive:
 				get_parent().get_node("mech").isActive = true
 				isActive = false

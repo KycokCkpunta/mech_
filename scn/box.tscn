@@ -1,11 +1,40 @@
-[gd_scene load_steps=3 format=1]
+[gd_scene load_steps=7 format=1]
 
 [ext_resource path="res://scr/lvl_area.gd" type="Script" id=1]
+[ext_resource path="res://art/white.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
 extents = Vector2( 10, 10 )
+
+[sub_resource type="CanvasItemMaterial" id=2]
+
+shader/shading_mode = 1
+
+[sub_resource type="Animation" id=3]
+
+resource/name = "in"
+length = 0.1
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visibility/opacity")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = { "times":FloatArray( 0, 0.1 ), "transitions":FloatArray( 1, 1 ), "update":0, "values":[ 0.0, 1.0 ] }
+
+[sub_resource type="Animation" id=4]
+
+resource/name = "out"
+length = 0.3
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visibility/opacity")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = { "times":FloatArray( 0, 0.3 ), "transitions":FloatArray( 1, 1 ), "update":0, "values":[ 1.0, 0.0 ] }
 
 [node name="box" type="Area2D"]
 
@@ -24,6 +53,27 @@ script/script = ExtResource( 1 )
 shape = SubResource( 1 )
 trigger = false
 _update_shape_index = 0
+
+[node name="map_expl" type="Sprite" parent="."]
+
+visibility/visible = false
+visibility/opacity = 0.0
+material/material = SubResource( 2 )
+z/z = 25
+texture = ExtResource( 2 )
+modulate = Color( 0.628906, 0.628906, 0.628906, 1 )
+
+[node name="a" type="AnimationPlayer" parent="map_expl"]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/in = SubResource( 3 )
+anims/out = SubResource( 4 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = ""
 
 [connection signal="body_enter" from="." to="." method="_on_box_body_enter"]
 

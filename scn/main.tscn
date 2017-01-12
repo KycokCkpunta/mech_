@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=1]
+[gd_scene load_steps=13 format=1]
 
 [ext_resource path="res://scr/main.gd" type="Script" id=1]
 [ext_resource path="res://scn/floor.tres" type="TileSet" id=2]
@@ -6,15 +6,14 @@
 [ext_resource path="res://scn/walls.tres" type="TileSet" id=4]
 [ext_resource path="res://scr/gen.gd" type="Script" id=5]
 [ext_resource path="res://art/cursor.png" type="Texture" id=6]
-[ext_resource path="res://art/bb.png" type="Texture" id=7]
-[ext_resource path="res://scn/gg.tscn" type="PackedScene" id=8]
-[ext_resource path="res://art/light.png" type="Texture" id=9]
-[ext_resource path="res://scn/mech.tscn" type="PackedScene" id=10]
-[ext_resource path="res://scr/3d.gd" type="Script" id=11]
+[ext_resource path="res://scn/gg.tscn" type="PackedScene" id=7]
+[ext_resource path="res://art/light.png" type="Texture" id=8]
+[ext_resource path="res://scn/mech.tscn" type="PackedScene" id=9]
+[ext_resource path="res://scr/3d.gd" type="Script" id=10]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
-shader/shading_mode = 0
+shader/shading_mode = 1
 
 [sub_resource type="SpriteFrames" id=2]
 
@@ -111,14 +110,9 @@ material/material = SubResource( 1 )
 z/z = 25
 frames = SubResource( 2 )
 animation = "default"
+modulate = Color( 0.490196, 0.490196, 0.490196, 1 )
 
-[node name="bb" type="Sprite" parent="cur"]
-
-transform/scale = Vector2( 100, 100 )
-z/z = -100
-texture = ExtResource( 7 )
-
-[node name="gg" parent="." instance=ExtResource( 8 )]
+[node name="gg" parent="." instance=ExtResource( 7 )]
 
 editor/display_folded = true
 
@@ -132,7 +126,7 @@ modulate = Color( 0, 0, 0, 1 )
 
 enabled = true
 editor_only = false
-texture = ExtResource( 9 )
+texture = ExtResource( 8 )
 offset = Vector2( 0, 0 )
 scale = 2.0
 color = Color( 1, 1, 1, 1 )
@@ -154,7 +148,7 @@ shadow/item_mask = 1
 
 color = Color( 0, 0, 0, 1 )
 
-[node name="mech" parent="." instance=ExtResource( 10 )]
+[node name="mech" parent="." instance=ExtResource( 9 )]
 
 editor/display_folded = true
 z/z = 1
@@ -172,7 +166,7 @@ modulate = Color( 0, 0, 0, 1 )
 transform/pos = Vector2( 0, -1 )
 enabled = true
 editor_only = false
-texture = ExtResource( 9 )
+texture = ExtResource( 8 )
 offset = Vector2( 0, 0 )
 scale = 2.0
 color = Color( 1, 1, 1, 1 )
@@ -206,7 +200,7 @@ audio_listener/enable_2d = false
 audio_listener/enable_3d = false
 physics/object_picking = false
 gui/disable_input = false
-script/script = ExtResource( 11 )
+script/script = ExtResource( 10 )
 
 [node name="Camera" type="Camera" parent="3d"]
 

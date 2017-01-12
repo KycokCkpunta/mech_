@@ -7,13 +7,16 @@ var is_opt = false
 
 func fill_rooms():
 	for room in get_children():
-		var light = load("res://scn/room_props/roof_light.tscn").instance()
-		room.add_child(light)
+		if room.get_name().find("tunnel") == -1:
+			var light = load("res://scn/room_props/roof_light.tscn").instance()
+			room.add_child(light)
 
 func optimize():
 	if not is_opt:
 		for room in get_children():
 			for ch in room.get_children():
+				if ch.get_name() == "map_expl":
+					ch.get_node("a").play("in")
 				if ch.has_method("off"):
 					ch.off()
 		is_opt = true
@@ -21,6 +24,8 @@ func deoptimize():
 	if is_opt:
 		for room in get_children():
 			for ch in room.get_children():
+				if ch.get_name() == "map_expl":
+					ch.get_node("a").play("out")
 				if ch.has_method("on"):
 					ch.on()
 		is_opt = false
@@ -31,7 +36,9 @@ func _ready():
 	prop_points = get_node("../gen").prop_points
 	points = get_node("../gen").points
 	
-	#makingrooms
+	
+	
+	#making rooms
 	var id = 0
 	for i in prop_points:
 		var size
@@ -59,9 +66,18 @@ func _ready():
 				set_cell(x,y,0,randi()%2,randi()%2,randi()%2)
 		id+=1
 	#making tunnels
+	var id = 0
 	for i in points.keys():
 		var start_pos = i*16
 		var end_pos = points[i]*16
+		var box = load("res://scn/box.tscn").instance()
+		box.room = "tunnel_"+str(id)
+		box.set_pos(map_to_world((start_pos+end_pos)/2))
+		if start_pos.x == end_pos.x:
+			box.size = map_to_world(Vector2(1,8))
+		if start_pos.y == end_pos.y:
+			box.size = map_to_world(Vector2(8,1))
+		add_child(box)
 		for j in range(16):
 			var perc = float(j)
 			var pos = start_pos.linear_interpolate(end_pos,perc/16).snapped(Vector2(1,1))
@@ -71,6 +87,7 @@ func _ready():
 			if start_pos.y == end_pos.y:
 				for y in range(pos.y-1,pos.y+1):
 					set_cell(pos.x,y,0)
+		id+=1
 	
 	#making walls
 	var walls = get_node("../walls")
