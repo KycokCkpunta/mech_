@@ -29,3 +29,5 @@ func _on_box_body_enter( body ):
 func _on_box_body_exit( body ):
 	if body.get_name() in ["gg","mech"]:
 		isIn = false
+
+

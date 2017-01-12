@@ -40,6 +40,8 @@ func _ready():
 	
 	#making rooms
 	var id = 0
+	var small_rooms = []
+	var big_rooms = []
 	for i in prop_points:
 		var size
 		var pos
@@ -49,10 +51,12 @@ func _ready():
 		if i[1] == "small":
 			size = Vector2(8,8)
 			pos=i[0]*16
+			small_rooms.append(pos)
 			
 		if i[1] == "big":
 			size = Vector2(12,12)
 			pos=i[0]*16
+			big_rooms.append(pos)
 		
 		if (i[2] in ["start","end"]) != true:
 			var box = load("res://scn/box.tscn").instance()
@@ -70,13 +74,53 @@ func _ready():
 	for i in points.keys():
 		var start_pos = i*16
 		var end_pos = points[i]*16
+		
+		if small_rooms.find(start_pos) != -1:
+			if start_pos.x > end_pos.x:
+				start_pos-=Vector2(4,0)
+			if start_pos.x < end_pos.x:
+				start_pos+=Vector2(4,0)
+			if start_pos.y > end_pos.y:
+				start_pos-=Vector2(0,4)
+			if start_pos.y < end_pos.y:
+				start_pos+=Vector2(0,4)
+		elif big_rooms.find(start_pos) != -1:
+			if start_pos.x > end_pos.x:
+				start_pos-=Vector2(6,0)
+			if start_pos.x < end_pos.x:
+				start_pos+=Vector2(6,0)
+			if start_pos.y > end_pos.y:
+				start_pos-=Vector2(0,6)
+			if start_pos.y < end_pos.y:
+				start_pos+=Vector2(0,6)
+
+		if small_rooms.find(end_pos) != -1:
+			if end_pos.x > start_pos.x:
+				end_pos-=Vector2(4,0)
+			if end_pos.x < start_pos.x:
+				end_pos+=Vector2(4,0)
+			if end_pos.y > start_pos.y:
+				end_pos-=Vector2(0,4)
+			if end_pos.y < start_pos.y:
+				end_pos+=Vector2(0,4)
+		elif big_rooms.find(end_pos) != -1:
+			if end_pos.x > start_pos.x:
+				end_pos-=Vector2(6,0)
+			if end_pos.x < start_pos.x:
+				end_pos+=Vector2(6,0)
+			if end_pos.y > start_pos.y:
+				end_pos-=Vector2(0,6)
+			if end_pos.y < start_pos.y:
+				end_pos+=Vector2(0,6)
+			
 		var box = load("res://scn/box.tscn").instance()
 		box.room = "tunnel_"+str(id)
-		box.set_pos(map_to_world((start_pos+end_pos)/2))
 		if start_pos.x == end_pos.x:
-			box.size = map_to_world(Vector2(1,8))
+			box.size = Vector2(16,(start_pos.y-end_pos.y)*8)
 		if start_pos.y == end_pos.y:
-			box.size = map_to_world(Vector2(8,1))
+			box.size = Vector2((start_pos.x-end_pos.x)*8,16)
+		box.set_pos(map_to_world((start_pos+end_pos)/2))
+		
 		add_child(box)
 		for j in range(16):
 			var perc = float(j)

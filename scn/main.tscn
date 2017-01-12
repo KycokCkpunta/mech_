@@ -89,7 +89,7 @@ drag_margin/bottom = 0.2
 anchor_mode = 1
 rotating = false
 current = true
-zoom = Vector2( 1, 1 )
+zoom = Vector2( 0.5, 0.5 )
 limit/left = -10000000
 limit/top = -10000000
 limit/right = 10000000
@@ -113,8 +113,6 @@ animation = "default"
 modulate = Color( 0.490196, 0.490196, 0.490196, 1 )
 
 [node name="gg" parent="." instance=ExtResource( 7 )]
-
-editor/display_folded = true
 
 [node name="3d_view" type="ViewportSprite" parent="gg"]
 
@@ -150,7 +148,6 @@ color = Color( 0, 0, 0, 1 )
 
 [node name="mech" parent="." instance=ExtResource( 9 )]
 
-editor/display_folded = true
 z/z = 1
 
 [node name="3d_view" type="ViewportSprite" parent="mech"]
