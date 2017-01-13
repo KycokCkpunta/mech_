@@ -8,6 +8,8 @@ var room = ""
 var isIn = false
 var explored = false
 
+var isStart = false
+
 func _ready():
 	var shape = RectangleShape2D.new()
 	shape.set_name(room+"_col")
@@ -16,6 +18,8 @@ func _ready():
 	get_node("col").set_shape(shape)
 	mapE.set_scale(size/16)
 	set_name(room)
+	if room.find("root_box") != -1:
+		get_node("map_expl").show()
 
 func _on_box_body_enter( body ):
 	if body.get_name() in ["gg","mech"] and not isIn:
