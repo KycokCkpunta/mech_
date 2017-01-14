@@ -1,7 +1,15 @@
 extends TileMap
 
+onready var astar = AStar.new()
+var path = []
+
 var prop_points
 var points
+
+#buff_vars
+var isAllMap = false
+var isAllRooms = false
+var isPath = false
 
 var is_opt = false
 
@@ -21,11 +29,32 @@ func get_end_pos():
 				pos = room.get_pos()
 	return pos
 
+func open_map():
+	for room in get_children():
+		if isAllMap:
+			room.get_node("map_expl").show()
+		else:
+			pass
+		if room.get_name().find("tunnel") == -1 and room.get_name().find("root_box") == -1:
+			if isAllRooms:
+				room.get_node("map_expl").show()
+			else:
+				pass
+		if isPath:
+			for i in path:
+				if room.get_pos() == i*256:
+					room.get_node("map_expl").show()
+		else:
+			pass
+
 func fill_rooms():
 	for room in get_children():
 		if room.get_name().find("tunnel") == -1 and room.get_name().find("root_box") == -1:
-			var light = load("res://scn/room_props/roof_light.tscn").instance()
-			room.add_child(light)
+			#basic_lights (testing)
+#			var light = load("res://scn/room_props/roof_light.tscn").instance()
+#			room.add_child(light)
+			pass
+	open_map()
 
 func optimize():
 	if not is_opt:
@@ -59,10 +88,15 @@ func _ready():
 	var small_rooms = []
 	var big_rooms = []
 	var none_rooms = []
+	var id_points = [] # id,pos
+	var st_id = 0
+	var end_id = 0
 	for i in prop_points:
 		var size
 		var pos
 		var color
+		astar.add_point(id,Vector3(i[0].x,0,i[0].y))
+		id_points.append([id,i[0]])
 		if i[1] == "none":
 			size = Vector2(4,4)
 			pos=i[0]*16
@@ -84,7 +118,10 @@ func _ready():
 		else:
 			box.room = "root_box_"+str(id)
 			if i[2] == "start":
+				st_id = id
 				box.isStart = true
+			end_id = id
+			box.get_node("map_expl").show()
 		box.set_pos(map_to_world(pos))
 		box.size = map_to_world(size)/2
 		add_child(box)
@@ -96,8 +133,41 @@ func _ready():
 	#making tunnels
 	var id = 0
 	for i in points.keys():
+		var from_id = 0
+		var to_id = 0
+		for p in id_points:
+			if p[1] == i:
+				from_id = p[0]
+		for p in id_points:
+			if p[1] == points[i]:
+				to_id = p[0]
+				
 		var start_pos = i*16
 		var end_pos = points[i]*16
+		
+		#tunnel_rooms
+		var start_room = ""
+		var end_room = ""
+		
+		#connected rooms
+		for room in get_children():
+			if room.get_pos() == i*256:
+				start_room = room.get_name()
+				for connected_room in get_children():
+					if connected_room.get_pos() == points[i]*256:
+						room.connected_rooms.append(connected_room.get_name())
+				room.connected_rooms.append("tunnel_"+str(id))
+			if room.get_pos() == points[i]*256:
+				end_room = room.get_name()
+				for connected_room in get_children():
+					if connected_room.get_pos() == i*256:
+						room.connected_rooms.append(connected_room.get_name())
+				room.connected_rooms.append("tunnel_"+str(id))
+		
+		
+		
+		if from_id != to_id:
+			astar.connect_points(from_id,to_id)
 		
 		for j in range(16):
 			var perc = float(j)
@@ -173,8 +243,16 @@ func _ready():
 			box.size = Vector2((start_pos.x-end_pos.x)*8,16)
 		box.set_pos(map_to_world((start_pos+end_pos)/2))
 		
+		box.connected_rooms.append(start_room)
+		box.connected_rooms.append(end_room)
+		
 		add_child(box)
 		id+=1
+	path = astar.get_point_path(st_id,end_id)
+	var vec2_path = []
+	for i in path:
+		vec2_path.append(Vector2(i.x,i.z))
+	path = vec2_path
 	
 	#making walls
 	var walls = get_node("../walls")

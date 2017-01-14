@@ -4,6 +4,7 @@ var count = 32
 var points = [Vector2(0,0)]
 var prop_points = [] #pos, size (small,big,none),is_key (true,false,end,start)
 
+
 func gen():
 	randomize()
 	var i = 1
@@ -56,6 +57,7 @@ func gen():
 				key_points.append(i)
 			else:
 				prop_points.append([i,"none","false"])
+		
 	var st_point = key_points[randi()%key_points.size()]
 	prop_points.append([st_point,"big","start"])
 	var end_point 
@@ -65,6 +67,9 @@ func gen():
 			dist = i.distance_to(st_point)
 			end_point = i
 	prop_points.append([end_point,"big","end"])
+	
+	
+	
  
 func get_dots_with_neighbor(dots):
 	var dots_with_neighbor = {}
@@ -97,28 +102,3 @@ func intersection(veca_1, veca_2, vecb_1, vecb_2):
 	var v3 = (veca_2.x - veca_1.x) * (vecb_1.y - veca_1.y) - (veca_2.y - veca_1.y) * (vecb_1.x - veca_1.x)
 	var v4 = (veca_2.x - veca_1.x) * (vecb_2.y - veca_1.y) - (veca_2.y - veca_1.y) * (vecb_2.x - veca_1.x)
 	return (v1 * v2 < 0) and (v3 * v4 < 0)
-	
-#func _draw():
-#	for i in points.keys():
-#		draw_line(i*16,points[i]*16,Color(1,1,1),8)
-#	for i in prop_points:
-#		var size
-#		var pos
-#		var color
-#		if i[1] == "none":
-#			continue
-#		if i[1] == "small":
-#			size = Vector2(8,8)
-#			pos=i[0]*16-Vector2(4,4)
-#		if i[1] == "big":
-#			size = Vector2(12,12)
-#			pos=i[0]*16-Vector2(6,6)
-#		if i[2] == "true":
-#			color=Color(1,0,0)
-#		if i[2] == "false":
-#			color=Color(1,1,0)
-#		if i[2] == "start":
-#			color=Color(0.2,0.2,0)
-#		if i[2] == "end":
-#			color=Color(0,0,1)
-#		draw_rect(Rect2(pos,size),color)

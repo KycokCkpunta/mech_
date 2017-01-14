@@ -4,6 +4,8 @@ onready var mapE = get_node("map_expl")
 
 var size = Vector2()
 var room = ""
+var connected_rooms = []
+
 
 var isIn = false
 var explored = false
@@ -18,8 +20,6 @@ func _ready():
 	get_node("col").set_shape(shape)
 	mapE.set_scale(size/16)
 	set_name(room)
-	if room.find("root_box") != -1:
-		get_node("map_expl").show()
 
 func _on_box_body_enter( body ):
 	if body.get_name() in ["gg","mech"] and not isIn:
@@ -28,6 +28,12 @@ func _on_box_body_enter( body ):
 		if not explored:
 			explored = true
 			get_node("map_expl").show()
+		for i in get_parent().get_children():
+			if i.explored == false:
+				for j in connected_rooms:
+					if i.get_name() == j:
+						i.explored = true
+						i.get_node("map_expl").show()
 			
 
 func _on_box_body_exit( body ):
