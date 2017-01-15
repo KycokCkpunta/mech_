@@ -51,8 +51,15 @@ func fill_rooms():
 	for room in get_children():
 		if room.get_name().find("tunnel") == -1 and room.get_name().find("root_box") == -1:
 			#basic_lights (testing)
-#			var light = load("res://scn/room_props/roof_light.tscn").instance()
-#			room.add_child(light)
+			var light = load("res://scn/room_props/roof_light.tscn").instance()
+			room.add_child(light)
+			pass
+		if room.get_name().find("tunnel") != -1:
+			#door
+			for c in range(2):
+				var door = load("res://scn/room_props/door.tscn").instance()
+				door.set_name("door_"+str(c))
+				room.add_child(door)
 			pass
 	open_map()
 
@@ -141,7 +148,10 @@ func _ready():
 		for p in id_points:
 			if p[1] == points[i]:
 				to_id = p[0]
-				
+		
+		if from_id == to_id:
+			continue
+		
 		var start_pos = i*16
 		var end_pos = points[i]*16
 		
@@ -166,8 +176,8 @@ func _ready():
 		
 		
 		
-		if from_id != to_id:
-			astar.connect_points(from_id,to_id)
+		
+		astar.connect_points(from_id,to_id)
 		
 		for j in range(16):
 			var perc = float(j)
@@ -239,8 +249,10 @@ func _ready():
 		box.room = "tunnel_"+str(id)
 		if start_pos.x == end_pos.x:
 			box.size = Vector2(16,(start_pos.y-end_pos.y)*8)
+			box.is_horz = false
 		if start_pos.y == end_pos.y:
 			box.size = Vector2((start_pos.x-end_pos.x)*8,16)
+			box.is_horz = true
 		box.set_pos(map_to_world((start_pos+end_pos)/2))
 		
 		box.connected_rooms.append(start_room)

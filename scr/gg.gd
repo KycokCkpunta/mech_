@@ -35,6 +35,7 @@ func _fixed_process(delta):
 		set_pos(get_parent().get_node("mech").get_pos())
 		get_node("CollisionShape2D").set_trigger(true)
 		hide()
+		pass
 		
 	base.set_rot(lerp(base.get_rot(),head.get_rot(),delta*10))
 	

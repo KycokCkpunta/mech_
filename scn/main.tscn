@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=1]
+[gd_scene load_steps=14 format=1]
 
 [ext_resource path="res://scr/main.gd" type="Script" id=1]
 [ext_resource path="res://scn/floor.tres" type="TileSet" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://art/light.png" type="Texture" id=8]
 [ext_resource path="res://scn/mech.tscn" type="PackedScene" id=9]
 [ext_resource path="res://scr/3d.gd" type="Script" id=10]
+[ext_resource path="res://scr/hud.gd" type="Script" id=11]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -67,6 +68,7 @@ script/script = ExtResource( 5 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
+editor/display_folded = true
 anchor_mode = 1
 rotating = false
 current = false
@@ -116,6 +118,7 @@ modulate = Color( 0.490196, 0.490196, 0.490196, 1 )
 [node name="gg" parent="." instance=ExtResource( 7 )]
 
 process/pause_mode = 1
+editor/display_folded = true
 transform/pos = Vector2( 4096, 4096 )
 
 [node name="3d_view" type="ViewportSprite" parent="gg"]
@@ -153,6 +156,7 @@ color = Color( 0, 0, 0, 1 )
 [node name="mech" parent="." instance=ExtResource( 9 )]
 
 process/pause_mode = 1
+editor/display_folded = true
 transform/pos = Vector2( 4096, 4096 )
 z/z = 1
 
@@ -189,6 +193,7 @@ shadow/item_mask = 1
 
 [node name="3d" type="Viewport" parent="."]
 
+editor/display_folded = true
 rect = Rect2( 0, 0, 640, 360 )
 own_world = false
 world = null
@@ -219,5 +224,27 @@ visible_layers = 1048575
 environment = null
 h_offset = 0.0
 v_offset = 0.0
+
+[node name="hud" type="CanvasLayer" parent="."]
+
+layer = 1
+offset = Vector2( 0, 0 )
+rotation = 0.0
+scale = Vector2( 1, 1 )
+script/script = ExtResource( 11 )
+
+[node name="dbg" type="Label" parent="hud"]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 640.0
+margin/bottom = 14.0
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
 
 

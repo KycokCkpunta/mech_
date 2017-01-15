@@ -55,6 +55,7 @@ func _fixed_process(delta):
 		alive = false
 		get_node("Light2D").set_energy(0)
 		get_node("3d_view").hide()
+		pass
 #	#input
 	if Input.is_action_pressed("walk_fw"):
 		base_new_pos+=Vector2(0,1)

@@ -13,6 +13,8 @@ var old_pos = Vector2()
 var cam_zoom = 0
 var map_zoom = 1
 
+var near_rooms = []
+
 var isScnReady = false
 
 func _ready():
