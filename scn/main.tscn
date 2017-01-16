@@ -118,7 +118,6 @@ modulate = Color( 0.490196, 0.490196, 0.490196, 1 )
 [node name="gg" parent="." instance=ExtResource( 7 )]
 
 process/pause_mode = 1
-editor/display_folded = true
 transform/pos = Vector2( 4096, 4096 )
 
 [node name="3d_view" type="ViewportSprite" parent="gg"]
@@ -139,7 +138,7 @@ energy = 0.3
 mode = 0
 range/height = 0.0
 range/z_min = -1024
-range/z_max = 1024
+range/z_max = 9
 range/layer_min = 0
 range/layer_max = 0
 range/item_mask = 1
@@ -156,14 +155,12 @@ color = Color( 0, 0, 0, 1 )
 [node name="mech" parent="." instance=ExtResource( 9 )]
 
 process/pause_mode = 1
-editor/display_folded = true
 transform/pos = Vector2( 4096, 4096 )
 z/z = 1
 
 [node name="3d_view" type="ViewportSprite" parent="mech"]
 
 visibility/visible = false
-transform/pos = Vector2( 0, -1 )
 z/z = 10
 viewport = NodePath("../../3d")
 modulate = Color( 0, 0, 0, 1 )
@@ -181,7 +178,7 @@ energy = 0.3
 mode = 0
 range/height = 0.0
 range/z_min = -1024
-range/z_max = 1024
+range/z_max = 9
 range/layer_min = 0
 range/layer_max = 0
 range/item_mask = 1
@@ -193,7 +190,6 @@ shadow/item_mask = 1
 
 [node name="3d" type="Viewport" parent="."]
 
-editor/display_folded = true
 rect = Rect2( 0, 0, 640, 360 )
 own_world = false
 world = null
@@ -213,9 +209,9 @@ script/script = ExtResource( 10 )
 [node name="Camera" type="Camera" parent="3d"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, -4.37114e-008, 1, 0, -1, -4.37114e-008, 0.5, 10, 0.5 )
+transform/local = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 10, 0.5 )
 projection = 0
-fov = 85.0
+fov = 86.0
 near = 0.1
 far = 100.0
 keep_aspect = 1
