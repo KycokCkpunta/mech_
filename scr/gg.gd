@@ -3,6 +3,8 @@ extends KinematicBody2D
 onready var head = get_node("head")
 onready var base = get_node("base")
 
+var speed = 56
+
 var mouse_pos = Vector2(0,0)
 var move_vector = Vector2(0,0)
 var base_move_vector = Vector2(0,1)
@@ -71,7 +73,7 @@ func _fixed_process(delta):
 	else:
 		move_vector=Vector2(0,0)
 	
-	move(move_vector*delta*56) #56 is def
+	move(move_vector*delta*speed) 
 	var slide_attempts = 4
 	while(is_colliding() and slide_attempts > 0):
 		move_vector = get_collision_normal().slide(move_vector)

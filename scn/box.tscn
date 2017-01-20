@@ -58,10 +58,11 @@ _update_shape_index = 0
 
 visibility/visible = false
 visibility/opacity = 0.0
+visibility/self_opacity = 0.2
+visibility/blend_mode = 1
 material/material = SubResource( 2 )
 z/z = 25
 texture = ExtResource( 2 )
-modulate = Color( 0.628906, 0.628906, 0.628906, 1 )
 
 [node name="a" type="AnimationPlayer" parent="map_expl"]
 

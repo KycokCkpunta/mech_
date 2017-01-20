@@ -11,6 +11,8 @@ onready var r_arm = get_node("top/r_arm")
 onready var l_arm_rot = get_node("top/l_arm_rot")
 onready var r_arm_rot = get_node("top/r_arm_rot")
 
+var speed = 36
+
 var move_vector = Vector2(0,0)
 var base_move_vector = Vector2(0,0)
 var base_new_pos = Vector2(0,1)
@@ -96,7 +98,8 @@ func _fixed_process(delta):
 	else:
 		move_vector=Vector2(0,0)
 		new_anim = "idle"
-	move(move_vector*delta*36)
+	move(move_vector*delta*speed)
+	
 	var slide_attempts = 4
 	while(is_colliding() and slide_attempts > 0):
 		move_vector = get_collision_normal().slide(move_vector)

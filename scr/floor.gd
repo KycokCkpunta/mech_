@@ -6,6 +6,8 @@ var path = []
 var prop_points
 var points
 
+var room_sizes = [Vector2(4,4),Vector2(8,8),Vector2(12,12)] #none, small, big
+
 #buff_vars
 var isAllMap = false
 var isAllRooms = false
@@ -78,8 +80,8 @@ func deoptimize():
 			for ch in room.get_children():
 				if ch.get_name() == "map_expl":
 					ch.get_node("a").play("out")
-				if ch.has_method("on"):
-					ch.on()
+			if room.isIn:
+				room._manage_lights()
 		is_opt = false
 	
 
@@ -105,18 +107,18 @@ func _ready():
 		astar.add_point(id,Vector3(i[0].x,0,i[0].y))
 		id_points.append([id,i[0]])
 		if i[1] == "none":
-			size = Vector2(4,4)
-			pos=i[0]*16
+			size = room_sizes[0]
+			pos=map_to_world(i[0])
 			none_rooms.append(pos)
 			
 		if i[1] == "small":
-			size = Vector2(8,8)
-			pos=i[0]*16
+			size = room_sizes[1]
+			pos=map_to_world(i[0])
 			small_rooms.append(pos)
 			
 		if i[1] == "big":
-			size = Vector2(12,12)
-			pos=i[0]*16
+			size = room_sizes[2]
+			pos=map_to_world(i[0])
 			big_rooms.append(pos)
 		
 		var box = load("res://scn/box.tscn").instance()
@@ -152,8 +154,8 @@ func _ready():
 		if from_id == to_id:
 			continue
 		
-		var start_pos = i*16
-		var end_pos = points[i]*16
+		var start_pos = map_to_world(i)
+		var end_pos = map_to_world(points[i])
 		
 		#tunnel_rooms
 		var start_room = ""
@@ -165,6 +167,7 @@ func _ready():
 				start_room = room.get_name()
 				for connected_room in get_children():
 					if connected_room.get_pos() == points[i]*256:
+						print(connected_room.get_pos(),", ",connected_room.get_name())
 						room.connected_rooms.append(connected_room.get_name())
 				room.connected_rooms.append("tunnel_"+str(id))
 			if room.get_pos() == points[i]*256:
@@ -173,8 +176,7 @@ func _ready():
 					if connected_room.get_pos() == i*256:
 						room.connected_rooms.append(connected_room.get_name())
 				room.connected_rooms.append("tunnel_"+str(id))
-		
-		
+			
 		
 		
 		astar.connect_points(from_id,to_id)
@@ -191,59 +193,59 @@ func _ready():
 		
 		if small_rooms.find(start_pos) != -1:
 			if start_pos.x > end_pos.x:
-				start_pos-=Vector2(4,0)
+				start_pos-=Vector2(room_sizes[1].x/2,0)
 			if start_pos.x < end_pos.x:
-				start_pos+=Vector2(4,0)
+				start_pos+=Vector2(room_sizes[1].x/2,0)
 			if start_pos.y > end_pos.y:
-				start_pos-=Vector2(0,4)
+				start_pos-=Vector2(0,room_sizes[1].y/2)
 			if start_pos.y < end_pos.y:
-				start_pos+=Vector2(0,4)
+				start_pos+=Vector2(0,room_sizes[1].y/2)
 		elif big_rooms.find(start_pos) != -1:
 			if start_pos.x > end_pos.x:
-				start_pos-=Vector2(6,0)
+				start_pos-=Vector2(room_sizes[2].x/2,0)
 			if start_pos.x < end_pos.x:
-				start_pos+=Vector2(6,0)
+				start_pos+=Vector2(room_sizes[2].x/2,0)
 			if start_pos.y > end_pos.y:
-				start_pos-=Vector2(0,6)
+				start_pos-=Vector2(0,room_sizes[2].y/2)
 			if start_pos.y < end_pos.y:
-				start_pos+=Vector2(0,6)
+				start_pos+=Vector2(0,room_sizes[2].y/2)
 		elif none_rooms.find(start_pos) != -1:
 			if start_pos.x > end_pos.x:
-				start_pos-=Vector2(2,0)
+				start_pos-=Vector2(room_sizes[0].x/2,0)
 			if start_pos.x < end_pos.x:
-				start_pos+=Vector2(2,0)
+				start_pos+=Vector2(room_sizes[0].x/2,0)
 			if start_pos.y > end_pos.y:
-				start_pos-=Vector2(0,2)
+				start_pos-=Vector2(0,room_sizes[0].y/2)
 			if start_pos.y < end_pos.y:
-				start_pos+=Vector2(0,2)
+				start_pos+=Vector2(0,room_sizes[0].y/2)
 
 		if small_rooms.find(end_pos) != -1:
 			if end_pos.x > start_pos.x:
-				end_pos-=Vector2(4,0)
+				end_pos-=Vector2(room_sizes[1].x/2,0)
 			if end_pos.x < start_pos.x:
-				end_pos+=Vector2(4,0)
+				end_pos+=Vector2(room_sizes[1].x/2,0)
 			if end_pos.y > start_pos.y:
-				end_pos-=Vector2(0,4)
+				end_pos-=Vector2(0,room_sizes[1].y/2)
 			if end_pos.y < start_pos.y:
-				end_pos+=Vector2(0,4)
+				end_pos+=Vector2(0,room_sizes[1].y/2)
 		elif big_rooms.find(end_pos) != -1:
 			if end_pos.x > start_pos.x:
-				end_pos-=Vector2(6,0)
+				end_pos-=Vector2(room_sizes[2].x/2,0)
 			if end_pos.x < start_pos.x:
-				end_pos+=Vector2(6,0)
+				end_pos+=Vector2(room_sizes[2].x/2,0)
 			if end_pos.y > start_pos.y:
-				end_pos-=Vector2(0,6)
+				end_pos-=Vector2(0,room_sizes[2].y/2)
 			if end_pos.y < start_pos.y:
-				end_pos+=Vector2(0,6)
+				end_pos+=Vector2(0,room_sizes[2].y/2)
 		elif none_rooms.find(end_pos) != -1:
 			if end_pos.x > start_pos.x:
-				end_pos-=Vector2(2,0)
+				end_pos-=Vector2(room_sizes[0].x/2,0)
 			if end_pos.x < start_pos.x:
-				end_pos+=Vector2(2,0)
+				end_pos+=Vector2(room_sizes[0].x/2,0)
 			if end_pos.y > start_pos.y:
-				end_pos-=Vector2(0,2)
+				end_pos-=Vector2(0,room_sizes[0].y/2)
 			if end_pos.y < start_pos.y:
-				end_pos+=Vector2(0,2)
+				end_pos+=Vector2(0,room_sizes[0].y/2)
 		
 		var box = load("res://scn/box.tscn").instance()
 		box.room = "tunnel_"+str(id)

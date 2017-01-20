@@ -12,22 +12,13 @@ var cur_scale = 2
 var old_pos = Vector2()
 var cam_zoom = 0
 var map_zoom = 1
+var far_zoom = 4096
 
 var near_rooms = []
 
 var isScnReady = false
 
 func _ready():
-	#first_frame_setup
-	map_zoom=8
-	get_node("floor").optimize()
-	if mech.isActive == true:
-		mech.get_node("3d_view").hide()
-		mech.get_node("Light2D").hide()
-	if gg.isActive == true:
-		gg.get_node("3d_view").hide()
-		gg.get_node("Light2D").hide()
-	
 	#1-st lvl scenery
 	var gg_start_pos = get_node("floor").get_start_pos()
 	var mech_end_pos = get_node("floor").get_end_pos()
@@ -47,7 +38,7 @@ func _process(delta):
 		pl_pos = gg.get_pos()
 	#camera
 	camera.set_pos(pl_pos.linear_interpolate((mouse_pos+pl_pos)/2,0.75))
-	cam_zoom = clamp(0.5+pl_pos.distance_to(mouse_pos)/5000,0.5,2)
+	cam_zoom = clamp(0.5+pl_pos.distance_to(mouse_pos)/far_zoom,0.5,2)
 	camera.set_zoom(Vector2(cam_zoom,cam_zoom))
 	
 	#cursor
