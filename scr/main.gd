@@ -63,12 +63,11 @@ func _process(delta):
 		get_tree().set_pause(true)
 	else:
 		map_zoom=lerp(map_zoom,camera.get_zoom().x,delta*5)
-		if map_zoom < 0.6:
-			get_node("floor").deoptimize()
-			if mech.isActive == true:
-				mech.get_node("3d_view").show()
-				mech.get_node("Light2D").show()
-			if gg.isActive == true:
-				gg.get_node("3d_view").show()
-				gg.get_node("Light2D").show()
-			get_tree().set_pause(false)
+		get_node("floor").deoptimize()
+		if mech.isActive == true:
+			mech.get_node("3d_view").show()
+			mech.get_node("Light2D").show()
+		if gg.isActive == true:
+			gg.get_node("3d_view").show()
+			gg.get_node("Light2D").show()
+		get_tree().set_pause(false)

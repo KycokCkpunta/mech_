@@ -21,6 +21,7 @@ func _fixed_process(delta):
 	if isActive:
 		show()
 		get_node("CollisionShape2D").set_trigger(false)
+		get_node("field").show()
 		head.look_at(mouse_pos)
 		if get_node("Light2D").get_energy() < 0.5:
 			get_node("Light2D").set_energy(get_node("Light2D").get_energy()+delta)
@@ -34,6 +35,7 @@ func _fixed_process(delta):
 		
 	else:
 		get_node("Light2D").set_energy(0)
+		get_node("field").hide()
 		set_pos(get_parent().get_node("mech").get_pos())
 		get_node("CollisionShape2D").set_trigger(true)
 		hide()

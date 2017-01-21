@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=1]
+[gd_scene load_steps=15 format=1]
 
 [ext_resource path="res://scr/main.gd" type="Script" id=1]
 [ext_resource path="res://scn/floor.tres" type="TileSet" id=2]
@@ -8,9 +8,10 @@
 [ext_resource path="res://art/cursor.png" type="Texture" id=6]
 [ext_resource path="res://scn/gg.tscn" type="PackedScene" id=7]
 [ext_resource path="res://art/light.png" type="Texture" id=8]
-[ext_resource path="res://scn/mech.tscn" type="PackedScene" id=9]
-[ext_resource path="res://scr/3d.gd" type="Script" id=10]
-[ext_resource path="res://scr/hud.gd" type="Script" id=11]
+[ext_resource path="res://art/field.png" type="Texture" id=9]
+[ext_resource path="res://scn/mech.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scr/3d.gd" type="Script" id=11]
+[ext_resource path="res://scr/hud.gd" type="Script" id=12]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -148,11 +149,16 @@ shadow/buffer_size = 512
 shadow/esm_multiplier = 80.0
 shadow/item_mask = 1
 
+[node name="field" type="Sprite" parent="gg"]
+
+z/z = 24
+texture = ExtResource( 9 )
+
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 
 color = Color( 0, 0, 0, 1 )
 
-[node name="mech" parent="." instance=ExtResource( 9 )]
+[node name="mech" parent="." instance=ExtResource( 10 )]
 
 process/pause_mode = 1
 transform/pos = Vector2( 4096, 4096 )
@@ -188,6 +194,11 @@ shadow/buffer_size = 512
 shadow/esm_multiplier = 80.0
 shadow/item_mask = 1
 
+[node name="field" type="Sprite" parent="mech"]
+
+z/z = 24
+texture = ExtResource( 9 )
+
 [node name="3d" type="Viewport" parent="."]
 
 rect = Rect2( 0, 0, 640, 360 )
@@ -204,7 +215,7 @@ audio_listener/enable_2d = false
 audio_listener/enable_3d = false
 physics/object_picking = false
 gui/disable_input = false
-script/script = ExtResource( 10 )
+script/script = ExtResource( 11 )
 
 [node name="Camera" type="Camera" parent="3d"]
 
@@ -227,7 +238,7 @@ layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
 scale = Vector2( 1, 1 )
-script/script = ExtResource( 11 )
+script/script = ExtResource( 12 )
 
 [node name="dbg" type="Label" parent="hud"]
 

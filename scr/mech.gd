@@ -36,6 +36,7 @@ func _fixed_process(delta):
 	r_arm.set_rot(lerp(r_arm.get_rot(),r_arm_rot.get_rot(),delta*15))
 	if isActive:
 		get_node("3d_view").show()
+		get_node("field").show()
 		_rot.look_at(mouse_pos)
 		l_arm_rot.look_at(mouse_pos)
 		r_arm_rot.look_at(mouse_pos)
@@ -55,6 +56,7 @@ func _fixed_process(delta):
 			
 	else:
 		alive = false
+		get_node("field").hide()
 		get_node("Light2D").set_energy(0)
 		get_node("3d_view").hide()
 		pass

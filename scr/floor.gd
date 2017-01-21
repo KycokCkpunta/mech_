@@ -37,7 +37,7 @@ func open_map():
 			room.get_node("map_expl").show()
 		else:
 			pass
-		if room.get_name().find("tunnel") == -1 and room.get_name().find("root_box") == -1:
+		if room.get_name().find("tunnel") == -1:
 			if isAllRooms:
 				room.get_node("map_expl").show()
 			else:
@@ -51,7 +51,7 @@ func open_map():
 
 func fill_rooms():
 	for room in get_children():
-		if room.get_name().find("tunnel") == -1 and room.get_name().find("root_box") == -1:
+		if room.get_name().find("tunnel") == -1:
 			#basic_lights (testing)
 			var light = load("res://scn/room_props/roof_light.tscn").instance()
 			room.add_child(light)
@@ -122,9 +122,8 @@ func _ready():
 			big_rooms.append(pos)
 		
 		var box = load("res://scn/box.tscn").instance()
-		if (i[2] in ["start","end"]) != true:
-			box.room = i[1]+"_"+str(id)
-		else:
+		box.room = i[1]+"_"+str(id)
+		if (i[2] in ["start","end"]) == true:
 			box.room = "root_box_"+str(id)
 			if i[2] == "start":
 				st_id = id

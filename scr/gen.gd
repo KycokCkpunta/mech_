@@ -58,15 +58,19 @@ func gen():
 			else:
 				prop_points.append([i,"none","false"])
 		
-	var st_point = key_points[randi()%key_points.size()]
-	prop_points.append([st_point,"big","start"])
-	var end_point 
+	var st_point_id = key_points[randi()%key_points.size()]
+	var st_point = prop_points[prop_points.find([st_point_id,"big","true"])]
+	prop_points[prop_points.find([st_point_id,"big","true"])] = [st_point[0],st_point[1],"start"]
+	var end_point_id
 	var dist = 0
 	for i in key_points:
-		if i.distance_to(st_point) > dist:
-			dist = i.distance_to(st_point)
-			end_point = i
-	prop_points.append([end_point,"big","end"])
+		if i.distance_to(st_point[0]) > dist:
+			dist = i.distance_to(st_point[0])
+			end_point_id = prop_points.find([i,"big","true"])
+	var end_point = prop_points[end_point_id]
+	prop_points[end_point_id] = [end_point[0],end_point[1],"end"]
+	
+	print(prop_points)
 	
 	
 	
