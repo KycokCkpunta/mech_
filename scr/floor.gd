@@ -1,6 +1,7 @@
 extends TileMap
 
 onready var astar = AStar.new()
+onready var perlin = get_node("../perlin")
 var path = []
 
 var prop_points
@@ -12,6 +13,8 @@ var room_sizes = [Vector2(4,4),Vector2(8,8),Vector2(12,12)] #none, small, big
 var isAllMap = false
 var isAllRooms = false
 var isPath = false
+var all_doors = true
+
 
 var is_opt = false
 
@@ -59,9 +62,10 @@ func fill_rooms():
 		if room.get_name().find("tunnel") != -1:
 			#door
 			for c in range(2):
-				var door = load("res://scn/room_props/door.tscn").instance()
-				door.set_name("door_"+str(c))
-				room.add_child(door)
+				if randi()%2 == 0 or all_doors:
+					var door = load("res://scn/room_props/door.tscn").instance()
+					door.set_name("door_"+str(c))
+					room.add_child(door)
 			pass
 	open_map()
 
@@ -283,5 +287,21 @@ func _ready():
 				get_cell(x,y+1) != -1 or
 				get_cell(x,y-1) != -1):
 					walls.set_cell(x,y,0)
-	
 	fill_rooms()
+	var a = perlin.perlin(x_r-x_l,y_b-y_t,1)[0]
+	var i = 0
+	while i < x_r-x_l:
+		var j = 0
+		while j < y_b-y_t:
+			if get_cell(i+x_l,j+y_t) != -1:
+				var s = Sprite.new()
+				s.set_pos(map_to_world(Vector2(i+x_l,j+y_t))+Vector2(8,8))
+				s.set_texture(load("res://art/tiles/1floor.png"))
+				
+				s.set_modulate(Color(0,0,0))
+				s.set_name(str([j,i]))
+				s.set_opacity(a[j][i]*0.1)
+			#	s.set_scale(Vector2(0.7,0.7))
+				get_node("../gen").add_child(s)
+			j+=1
+		i+=1

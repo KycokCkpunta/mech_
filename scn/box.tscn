@@ -61,7 +61,7 @@ visibility/opacity = 0.0
 visibility/self_opacity = 0.2
 visibility/blend_mode = 1
 material/material = SubResource( 2 )
-z/z = 25
+z/z = 30
 texture = ExtResource( 2 )
 
 [node name="a" type="AnimationPlayer" parent="map_expl"]
