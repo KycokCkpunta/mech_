@@ -1,18 +1,19 @@
-[gd_scene load_steps=16 format=1]
+[gd_scene load_steps=17 format=1]
 
 [ext_resource path="res://scr/main.gd" type="Script" id=1]
 [ext_resource path="res://scn/floor.tres" type="TileSet" id=2]
 [ext_resource path="res://scr/floor.gd" type="Script" id=3]
-[ext_resource path="res://scn/walls.tres" type="TileSet" id=4]
-[ext_resource path="res://scr/gen.gd" type="Script" id=5]
-[ext_resource path="res://scr/perlin.gd" type="Script" id=6]
-[ext_resource path="res://art/cursor.png" type="Texture" id=7]
-[ext_resource path="res://scn/gg.tscn" type="PackedScene" id=8]
-[ext_resource path="res://art/light.png" type="Texture" id=9]
-[ext_resource path="res://art/field.png" type="Texture" id=10]
-[ext_resource path="res://scn/mech.tscn" type="PackedScene" id=11]
-[ext_resource path="res://scr/3d.gd" type="Script" id=12]
-[ext_resource path="res://scr/hud.gd" type="Script" id=13]
+[ext_resource path="res://scn/floor_lvl2.tres" type="TileSet" id=4]
+[ext_resource path="res://scn/walls.tres" type="TileSet" id=5]
+[ext_resource path="res://scr/gen.gd" type="Script" id=6]
+[ext_resource path="res://scr/perlin.gd" type="Script" id=7]
+[ext_resource path="res://art/cursor.png" type="Texture" id=8]
+[ext_resource path="res://scn/gg.tscn" type="PackedScene" id=9]
+[ext_resource path="res://art/light.png" type="Texture" id=10]
+[ext_resource path="res://art/field.png" type="Texture" id=11]
+[ext_resource path="res://scn/mech.tscn" type="PackedScene" id=12]
+[ext_resource path="res://scr/3d.gd" type="Script" id=13]
+[ext_resource path="res://scr/hud.gd" type="Script" id=14]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -20,7 +21,7 @@ shader/shading_mode = 1
 
 [sub_resource type="SpriteFrames" id=2]
 
-animations = [ { "frames":[ ExtResource( 7 ) ], "loop":true, "name":"default", "speed":5.0 } ]
+animations = [ { "frames":[ ExtResource( 8 ) ], "loop":true, "name":"default", "speed":5.0 } ]
 
 [node name="main" type="Node2D"]
 
@@ -46,8 +47,10 @@ occluder/light_mask = 1
 tile_data = IntArray(  )
 script/script = ExtResource( 3 )
 
-[node name="walls" type="TileMap" parent="."]
+[node name="floor_lvl2" type="TileMap" parent="."]
 
+visibility/opacity = 0.5
+visibility/self_opacity = 0.5
 mode = 0
 tile_set = ExtResource( 4 )
 cell/size = Vector2( 16, 16 )
@@ -64,13 +67,31 @@ collision/mask = 1
 occluder/light_mask = 1
 tile_data = IntArray(  )
 
+[node name="walls" type="TileMap" parent="."]
+
+mode = 0
+tile_set = ExtResource( 5 )
+cell/size = Vector2( 16, 16 )
+cell/quadrant_size = 16
+cell/custom_transform = Matrix32( 1, 0, 0, 1, 0, 0 )
+cell/half_offset = 2
+cell/tile_origin = 0
+cell/y_sort = false
+collision/use_kinematic = false
+collision/friction = 1.0
+collision/bounce = 0.0
+collision/layers = 1
+collision/mask = 1
+occluder/light_mask = 1
+tile_data = IntArray(  )
+
 [node name="gen" type="Node2D" parent="."]
 
-script/script = ExtResource( 5 )
+script/script = ExtResource( 6 )
 
 [node name="perlin" type="Node2D" parent="."]
 
-script/script = ExtResource( 6 )
+script/script = ExtResource( 7 )
 imgx = 80
 imgy = 60
 persistence = 0.7
@@ -124,7 +145,7 @@ frames = SubResource( 2 )
 animation = "default"
 modulate = Color( 0.490196, 0.490196, 0.490196, 1 )
 
-[node name="gg" parent="." instance=ExtResource( 8 )]
+[node name="gg" parent="." instance=ExtResource( 9 )]
 
 process/pause_mode = 1
 transform/pos = Vector2( 4096, 4096 )
@@ -141,7 +162,7 @@ modulate = Color( 0, 0, 0, 1 )
 
 enabled = true
 editor_only = false
-texture = ExtResource( 9 )
+texture = ExtResource( 10 )
 offset = Vector2( 0, 0 )
 scale = 1.0
 color = Color( 1, 1, 1, 1 )
@@ -162,21 +183,21 @@ shadow/item_mask = 1
 [node name="field" type="Sprite" parent="gg"]
 
 z/z = 24
-texture = ExtResource( 10 )
+texture = ExtResource( 11 )
 
 [node name="shadow" type="Sprite" parent="gg"]
 
 visibility/opacity = 0.2
 transform/scale = Vector2( 0.05, 0.05 )
 z/relative = false
-texture = ExtResource( 9 )
+texture = ExtResource( 10 )
 modulate = Color( 0, 0, 0, 1 )
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 
 color = Color( 0, 0, 0, 1 )
 
-[node name="mech" parent="." instance=ExtResource( 11 )]
+[node name="mech" parent="." instance=ExtResource( 12 )]
 
 process/pause_mode = 1
 transform/pos = Vector2( 4096, 4096 )
@@ -194,7 +215,7 @@ modulate = Color( 0, 0, 0, 1 )
 transform/pos = Vector2( 0, -1 )
 enabled = true
 editor_only = false
-texture = ExtResource( 9 )
+texture = ExtResource( 10 )
 offset = Vector2( 0, 0 )
 scale = 1.0
 color = Color( 1, 1, 1, 1 )
@@ -215,14 +236,14 @@ shadow/item_mask = 1
 [node name="field" type="Sprite" parent="mech"]
 
 z/z = 24
-texture = ExtResource( 10 )
+texture = ExtResource( 11 )
 
 [node name="shadow" type="Sprite" parent="mech"]
 
 visibility/opacity = 0.2
 transform/scale = Vector2( 0.2, 0.2 )
 z/relative = false
-texture = ExtResource( 9 )
+texture = ExtResource( 10 )
 modulate = Color( 0, 0, 0, 1 )
 
 [node name="3d" type="Viewport" parent="."]
@@ -241,12 +262,12 @@ audio_listener/enable_2d = false
 audio_listener/enable_3d = false
 physics/object_picking = false
 gui/disable_input = false
-script/script = ExtResource( 12 )
+script/script = ExtResource( 13 )
 
 [node name="Camera" type="Camera" parent="3d"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, -4.37114e-008, 1, 0, -1, -4.37114e-008, 0.5, 10, 0.5 )
+transform/local = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 10, 0.5 )
 projection = 0
 fov = 86.0
 near = 0.1
@@ -264,7 +285,7 @@ layer = 1
 offset = Vector2( 0, 0 )
 rotation = 0.0
 scale = Vector2( 1, 1 )
-script/script = ExtResource( 13 )
+script/script = ExtResource( 14 )
 
 [node name="dbg" type="Label" parent="hud"]
 

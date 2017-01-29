@@ -18,6 +18,18 @@ var all_doors = true
 
 var is_opt = false
 
+func gen_noise_tex(f):
+	var img = Image(16,16,false,4)
+	for i in range(0,16):
+		for j in range(0,16):
+			if randi()%int(f*25) == 0:
+				img.put_pixel(i,j,Color(0,0,0,f*0.5))
+			else:
+				img.put_pixel(i,j,Color(0,0,0,0))
+	var texture = ImageTexture.new()
+	texture.create_from_image(img,0)
+	return texture
+
 func get_start_pos():
 	var pos = Vector2(0,0)
 	for room in get_children():
@@ -141,6 +153,7 @@ func _ready():
 		for x in range(pos.x-size.x/2,pos.x+size.x/2):
 			for y in range(pos.y-size.y/2,pos.y+size.y/2):
 				set_cell(x,y,0,randi()%2,randi()%2,randi()%2)
+				get_node("../floor_lvl2").set_cell(x,y,0)
 		id+=1
 	#making tunnels
 	var id = 0
@@ -190,9 +203,11 @@ func _ready():
 			if start_pos.x == end_pos.x:
 				for x in range(pos.x-1,pos.x+1):
 					set_cell(x,pos.y,0,randi()%2,randi()%2,randi()%2)
+					get_node("../floor_lvl2").set_cell(x,pos.y,0)
 			if start_pos.y == end_pos.y:
 				for y in range(pos.y-1,pos.y+1):
 					set_cell(pos.x,y,0)
+					get_node("../floor_lvl2").set_cell(pos.x,y,0)
 		
 		if small_rooms.find(start_pos) != -1:
 			if start_pos.x > end_pos.x:
@@ -296,12 +311,8 @@ func _ready():
 			if get_cell(i+x_l,j+y_t) != -1:
 				var s = Sprite.new()
 				s.set_pos(map_to_world(Vector2(i+x_l,j+y_t))+Vector2(8,8))
-				s.set_texture(load("res://art/tiles/1floor.png"))
-				
-				s.set_modulate(Color(0,0,0))
+				s.set_texture(gen_noise_tex(a[j][i]*0.2))
 				s.set_name(str([j,i]))
-				s.set_opacity(a[j][i]*0.1)
-			#	s.set_scale(Vector2(0.7,0.7))
 				get_node("../gen").add_child(s)
 			j+=1
 		i+=1
