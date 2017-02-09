@@ -1,7 +1,6 @@
 extends TileMap
 
 onready var astar = AStar.new()
-onready var perlin = get_node("../perlin")
 var path = []
 
 var prop_points
@@ -15,20 +14,7 @@ var isAllRooms = false
 var isPath = false
 var all_doors = true
 
-
 var is_opt = false
-
-func gen_noise_tex(f):
-	var img = Image(16,16,false,4)
-	for i in range(0,16):
-		for j in range(0,16):
-			if randi()%int(f*25) == 0:
-				img.put_pixel(i,j,Color(0,0,0,f*0.5))
-			else:
-				img.put_pixel(i,j,Color(0,0,0,0))
-	var texture = ImageTexture.new()
-	texture.create_from_image(img,0)
-	return texture
 
 func get_start_pos():
 	var pos = Vector2(0,0)
@@ -99,14 +85,11 @@ func deoptimize():
 			if room.isIn:
 				room._manage_lights()
 		is_opt = false
-	
 
 func _ready():
 	get_node("../gen").gen()
 	prop_points = get_node("../gen").prop_points
 	points = get_node("../gen").points
-	
-	
 	
 	#making rooms
 	var id = 0
@@ -145,7 +128,8 @@ func _ready():
 				st_id = id
 				box.isStart = true
 			end_id = id
-			box.get_node("map_expl").show()
+		##for debug perlin
+		#box.get_node("map_expl").set_modulate(Color(i[3],i[3],i[3]))
 		box.set_pos(map_to_world(pos))
 		box.size = map_to_world(size)/2
 		add_child(box)
@@ -183,7 +167,6 @@ func _ready():
 				start_room = room.get_name()
 				for connected_room in get_children():
 					if connected_room.get_pos() == points[i]*256:
-						print(connected_room.get_pos(),", ",connected_room.get_name())
 						room.connected_rooms.append(connected_room.get_name())
 				room.connected_rooms.append("tunnel_"+str(id))
 			if room.get_pos() == points[i]*256:
@@ -303,16 +286,4 @@ func _ready():
 				get_cell(x,y-1) != -1):
 					walls.set_cell(x,y,0)
 	fill_rooms()
-	var a = perlin.perlin(x_r-x_l,y_b-y_t,1)[0]
-	var i = 0
-	while i < x_r-x_l:
-		var j = 0
-		while j < y_b-y_t:
-			if get_cell(i+x_l,j+y_t) != -1:
-				var s = Sprite.new()
-				s.set_pos(map_to_world(Vector2(i+x_l,j+y_t))+Vector2(8,8))
-				s.set_texture(gen_noise_tex(a[j][i]*0.2))
-				s.set_name(str([j,i]))
-				get_node("../gen").add_child(s)
-			j+=1
-		i+=1
+	

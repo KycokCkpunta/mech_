@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=1]
+[gd_scene load_steps=20 format=1]
 
 [ext_resource path="res://scr/main.gd" type="Script" id=1]
 [ext_resource path="res://scn/floor.tres" type="TileSet" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://scn/mech.tscn" type="PackedScene" id=12]
 [ext_resource path="res://scr/3d.gd" type="Script" id=13]
 [ext_resource path="res://scr/hud.gd" type="Script" id=14]
+[ext_resource path="res://art/white.png" type="Texture" id=15]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -22,6 +23,30 @@ shader/shading_mode = 1
 [sub_resource type="SpriteFrames" id=2]
 
 animations = [ { "frames":[ ExtResource( 8 ) ], "loop":true, "name":"default", "speed":5.0 } ]
+
+[sub_resource type="Animation" id=3]
+
+resource/name = "in"
+length = 2.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visibility/opacity")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = { "times":FloatArray( 0, 0.5, 2 ), "transitions":FloatArray( 1, 1, 1 ), "update":0, "values":[ 1.0, 1.0, 0.0 ] }
+
+[sub_resource type="Animation" id=4]
+
+resource/name = "out"
+length = 2.0
+loop = false
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:visibility/opacity")
+tracks/0/interp = 1
+tracks/0/imported = false
+tracks/0/keys = { "times":FloatArray( 0, 0.5, 2 ), "transitions":FloatArray( 1, 1, 1 ), "update":0, "values":[ 0.0, 0.0, 1.0 ] }
 
 [node name="main" type="Node2D"]
 
@@ -148,6 +173,7 @@ modulate = Color( 0.490196, 0.490196, 0.490196, 1 )
 [node name="gg" parent="." instance=ExtResource( 9 )]
 
 process/pause_mode = 1
+editor/display_folded = true
 transform/pos = Vector2( 4096, 4096 )
 z/z = 1
 z/relative = false
@@ -200,6 +226,7 @@ color = Color( 0, 0, 0, 1 )
 [node name="mech" parent="." instance=ExtResource( 12 )]
 
 process/pause_mode = 1
+editor/display_folded = true
 transform/pos = Vector2( 4096, 4096 )
 z/z = 1
 
@@ -248,6 +275,7 @@ modulate = Color( 0, 0, 0, 1 )
 
 [node name="3d" type="Viewport" parent="."]
 
+editor/display_folded = true
 rect = Rect2( 0, 0, 640, 360 )
 own_world = false
 world = null
@@ -267,7 +295,7 @@ script/script = ExtResource( 13 )
 [node name="Camera" type="Camera" parent="3d"]
 
 _import_transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
-transform/local = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, 10, 0.5 )
+transform/local = Transform( 1, 0, 0, 0, -4.37114e-008, 1, 0, -1, -4.37114e-008, 0.5, 10, 0.5 )
 projection = 0
 fov = 86.0
 near = 0.1
@@ -300,5 +328,33 @@ margin/bottom = 14.0
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+
+[node name="black_screen" type="TextureFrame" parent="hud"]
+
+visibility/opacity = 0.0
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 640.0
+margin/bottom = 360.0
+texture = ExtResource( 15 )
+modulate = Color( 0, 0, 0, 1 )
+expand = true
+stretch_mode = 0
+
+[node name="anim" type="AnimationPlayer" parent="hud/black_screen"]
+
+playback/process_mode = 1
+playback/default_blend_time = 0.0
+root/root = NodePath("..")
+anims/in = SubResource( 3 )
+anims/out = SubResource( 4 )
+playback/active = true
+playback/speed = 1.0
+blend_times = [  ]
+autoplay = "in"
 
 

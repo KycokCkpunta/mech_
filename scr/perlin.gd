@@ -7,7 +7,6 @@ var imgAr = []
 
 func perlin(imgx, imgy, persistence):
 	var octaves = int(log(max(imgx, imgy)) / log(2))
-	print('persistence = ', persistence)
 	randomize()
 	var imgAr = []
 	for j in range(imgy):

@@ -1,11 +1,27 @@
 extends Node2D
 const EPS = 0.1
-var count = 32
+var count = 64
 var points = [Vector2(0,0)]
 var prop_points = [] #pos, size (small,big,none),is_key (true,false,end,start)
 
+func corners(arr):
+	var x_l = 0
+	var y_t = 0
+	var x_r = 0
+	var y_b = 0
+	for i in arr:
+		if i.x < x_l:
+			x_l = i.x
+		if i.x > x_r:
+			x_r = i.x
+		if i.y < y_b:
+			y_b = i.y
+		if i.y > y_t:
+			y_t = i.y
+	return [x_l-4,x_r+4,y_b-4,y_t+4]
 
 func gen():
+	var perlin = get_node("../perlin")
 	randomize()
 	var i = 1
 	points = [Vector2(0,0)]
@@ -39,6 +55,8 @@ func gen():
 			if sides[dir] == 3:
 				points.append(points[j]-Vector2(0,1))
 				i+=1
+	var corners = corners(points)
+	var a = perlin.perlin(corners[1]-corners[0],corners[3]-corners[2],1)[0]
 	points = get_dots_with_neighbor(points)
 	var key_points = []
 	prop_points = [] #pos, size (small,big,none),is_key (true,false,end,start)
@@ -57,7 +75,7 @@ func gen():
 				key_points.append(i)
 			else:
 				prop_points.append([i,"none","false"])
-		
+	
 	var st_point_id = key_points[randi()%key_points.size()]
 	var st_point = prop_points[prop_points.find([st_point_id,"big","true"])]
 	prop_points[prop_points.find([st_point_id,"big","true"])] = [st_point[0],st_point[1],"start"]
@@ -70,8 +88,14 @@ func gen():
 	var end_point = prop_points[end_point_id]
 	prop_points[end_point_id] = [end_point[0],end_point[1],"end"]
 	
-	print(prop_points)
-	
+	var a = perlin.perlin(corners[1]-corners[0],corners[3]-corners[2],0.3)[0]
+	for x in range(corners[0],corners[1]):
+		for y in range(corners[2],corners[3]):
+			for i in range(prop_points.size()):
+				var pos = prop_points[i][0]
+				var iter_pos = Vector2(x,y)
+				if pos == iter_pos:
+					prop_points[i].append(a[x][y])
 	
 	
  

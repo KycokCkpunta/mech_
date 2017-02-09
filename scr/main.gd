@@ -11,7 +11,7 @@ onready var gg = get_node("gg")
 var cur_scale = 2
 var old_pos = Vector2()
 var cam_zoom = 0
-var map_zoom = 1
+var map_zoom = 8
 var far_zoom = 4096
 
 var near_rooms = []
@@ -19,6 +19,16 @@ var near_rooms = []
 var isScnReady = false
 
 func _ready():
+	#init
+	get_node("floor").optimize()
+	if mech.isActive == true:
+		mech.get_node("3d_view").hide()
+		mech.get_node("Light2D").hide()
+	if gg.isActive == true:
+		gg.get_node("3d_view").hide()
+		gg.get_node("Light2D").hide()
+	get_tree().set_pause(true)
+	
 	#1-st lvl scenery
 	var gg_start_pos = get_node("floor").get_start_pos()
 	var mech_end_pos = get_node("floor").get_end_pos()
@@ -63,11 +73,12 @@ func _process(delta):
 		get_tree().set_pause(true)
 	else:
 		map_zoom=lerp(map_zoom,camera.get_zoom().x,delta*5)
-		get_node("floor").deoptimize()
-		if mech.isActive == true:
-			mech.get_node("3d_view").show()
-			mech.get_node("Light2D").show()
-		if gg.isActive == true:
-			gg.get_node("3d_view").show()
-			gg.get_node("Light2D").show()
-		get_tree().set_pause(false)
+		if map_zoom < 2:
+			get_node("floor").deoptimize()
+			if mech.isActive == true:
+				mech.get_node("3d_view").show()
+				mech.get_node("Light2D").show()
+			if gg.isActive == true:
+				gg.get_node("3d_view").show()
+				gg.get_node("Light2D").show()
+			get_tree().set_pause(false)
